@@ -1,0 +1,3 @@
+final-patcher/bins/
+*.o
+src/*.bin

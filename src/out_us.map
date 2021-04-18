@@ -1,0 +1,791 @@
+Archive member included because of file (symbol)
+
+/usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o)
+                              networking.o (NetManInit)
+/usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_server.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o) (NetManRPCAllocRxBuffers)
+/usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_client.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o) (NetManInitRPCClient)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o)
+                              networking.o (ps2ip_getconfig)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sys_arch.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o) (sys_sem_new)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o) (netif_add)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o) (pbuf_alloc)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o) (udp_netif_ip_addr_changed)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o) (memp_malloc)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o) (tcp_active_pcbs)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ethernet.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o) (ethernet_input)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(etharp.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o) (etharp_request)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o) (tcp_timer_needed)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(icmp.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o) (icmp_dest_unreach)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o) (ip_data)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o) (ip4_route)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_addr.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o) (ip_addr_any)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_frag.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o) (ip_reass_tmr)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(inet_chksum.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o) (ip_chksum_pseudo)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o)
+                              logging.o (lwip_accept)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o) (lock_tcpip_core)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o) (dhcp_coarse_tmr)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dns.o)
+                              networking.o (dns_setserver)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(lwip_init.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o) (lwip_init)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(mem.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(lwip_init.o) (mem_init)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4.o) (tcp_input)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_out.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o) (tcp_send_fin)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(def.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dns.o) (lwip_strnicmp)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_lib.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o) (netconn_new_with_proto_and_callback)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_msg.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_lib.o) (netconn_aborted)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_netbuf.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o) (netbuf_new)
+/usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(err.o)
+                              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o) (err_to_errno)
+
+Allocating common symbols
+Common symbol       size              file
+
+memp_memory_NETDB_base
+                    0x17f             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+netif_list          0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+lock_tcpip_core     0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+ip_data             0x18              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip.o)
+memp_memory_NETBUF_base
+                    0xbf              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+tcp_active_pcbs_changed
+                    0x1               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+tcp_active_pcbs     0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+udp_pcbs            0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o)
+_gp                 0x8000            loader.o
+tcp_ticks           0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+tcp_listen_pcbs     0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+memp_memory_TCP_SEG_base
+                    0x203f            /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+memp_memory_PBUF_POOL_base
+                    0x3203f           /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+memp_memory_TCPIP_MSG_API_base
+                    0xcbf             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+tcp_input_pcb       0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+dhcp_rx_options_given
+                    0xa               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+memp_memory_PBUF_base
+                    0x43f             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+tcp_bound_pcbs      0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+memp_memory_TCP_PCB_LISTEN_base
+                    0x23f             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+memp_memory_REASSDATA_base
+                    0x17f             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+memp_memory_UDP_PCB_base
+                    0x13f             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+pbuf_free_ooseq_pending
+                    0x1               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o)
+netconn_aborted     0x1               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_msg.o)
+tcp_tw_pcbs         0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+memp_memory_NETCONN_base
+                    0x27f             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+netif_default       0x4               /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+pre_gp              0x8000            loader.o
+dhcp_rx_options_val
+                    0x28              /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+memp_memory_TCP_PCB_base
+                    0x3ff             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+memp_memory_SYS_TIMEOUT_base
+                    0x1bf             /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x0000000000311280 0x0000000000800000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD entry.o
+                0x00000000001203f0                malloc = 0x1203f0
+                0x0000000000120350                free = 0x120350
+                0x0000000000142588                printf = 0x142588
+                0x000000000012caa0                FlushCache = 0x12caa0
+                0x0000000000131610                SifLoadModule = 0x131610
+                0x000000000012f870                SifBindRpc = 0x12f870
+                0x000000000012fa40                SifCallRpc = 0x12fa40
+                0x000000000012f130                SifWriteBackDCache = 0x12f130
+                0x000000000012cc10                SifSetDChain = 0x12cc10
+                0x000000000012d790                iWakeupThread = 0x12d790
+                0x000000000012e128                putchar = 0x12e128
+                0x000000000012daf8                puts_internal = 0x12daf8
+                0x000000000012c620                CreateThread = 0x12c620
+                0x000000000012c640                StartThread = 0x12c640
+                0x000000000012c530                AddDmacHandler = 0x12c530
+                0x000000000012d3e0                EnableDmac = 0x12d3e0
+                0x000000000012c740                SleepThread = 0x12c740
+                0x000000000012c550                RemoveDmacHandler = 0x12c550
+                0x000000000012c670                TerminateThread = 0x12c670
+                0x000000000012c630                DeleteThread = 0x12c630
+                0x000000000012c830                DeleteSema = 0x12c830
+                0x000000000012c820                CreateSema = 0x12c820
+                0x000000000012c840                SignalSema = 0x12c840
+                0x000000000012c860                WaitSema = 0x12c860
+                0x000000000012c750                WakeupThread = 0x12c750
+                0x000000000012cbe0                SifSetDma = 0x12cbe0
+                0x000000000012cbc0                SifDmaStat = 0x12cbc0
+                0x000000000012ef90                SifSendCmd = 0x12ef90
+                0x000000000012cc10                iSifSetDChain = 0x12cc10
+                0x0000000000269f00                _sif_rpc_data = 0x269f00
+                0x00000000001300c8                SifRpcLoop = 0x1300c8
+                0x00000000001400c8                memalign = 0x1400c8
+                0x000000000012c700                iReleaseWaitThread = 0x12c700
+                0x000000000012d448                SetAlarm = 0x12d448
+                0x000000000012d4b8                ReleaseAlarm = 0x12d4b8
+                0x000000000012c710                GetThreadId = 0x12c710
+                0x00000000001435c0                strcpy = 0x1435c0
+                0x000000000012c870                PollSema = 0x12c870
+                0x00000000001436d8                strlen = 0x1436d8
+                0x000000000012c500                AddIntcHandler = 0x12c500
+                0x000000000012c520                RemoveIntcHandler = 0x12c520
+                0x000000000012d310                EnableIntc = 0x12d310
+                0x000000000012d2a8                DisableIntc = 0x12d2a8
+                0x00000000001c8a80                FrameWait = 0x1c8a80
+LOAD loader.o
+LOAD util.o
+LOAD util_asm.o
+LOAD networking.o
+LOAD logging.o
+LOAD time.o
+LOAD hook.o
+LOAD /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a
+LOAD /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a
+
+.text           0x0000000000311280    0x16cc0
+ *(.text)
+ .text          0x0000000000311280       0x20 entry.o
+                0x0000000000311280                entry
+ .text          0x00000000003112a0      0x128 loader.o
+                0x00000000003112a0                load_mod
+ .text          0x00000000003113c8      0x488 util.o
+                0x0000000000311820                __divdi3
+                0x0000000000311430                puts
+                0x00000000003117f0                __udivdi3
+                0x00000000003115a8                SifRemoveRpcQueue
+                0x0000000000311780                strncmp
+                0x00000000003113c8                putsn
+                0x0000000000311738                memcmp
+                0x00000000003114a8                DIntr
+                0x00000000003114f0                EIntr
+                0x00000000003116b8                SifRemoveRpc
+                0x0000000000311630                SifRegisterRpc
+                0x0000000000311508                SifSetRpcQueue
+ .text          0x0000000000311850      0x330 util_asm.o
+                0x0000000000311850                memcpy
+                0x00000000003119c0                strncpy
+                0x0000000000311900                memset
+ .text          0x0000000000311b80      0x4d8 networking.o
+                0x0000000000311b80                InitConnection
+ .text          0x0000000000312058      0x180 logging.o
+                0x00000000003121a0                LogStr
+                0x0000000000312058                InitLogging
+ .text          0x00000000003121d8      0x188 time.o
+                0x00000000003121d8                _ps2sdk_time_init
+                0x0000000000312260                _ps2sdk_time_deinit
+                0x00000000003122c0                ps2_clock
+                0x00000000003122e8                clock
+ .text          0x0000000000312360       0x68 hook.o
+                0x0000000000312360                CreateHook
+ .text          0x00000000003123c8      0x470 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o)
+                0x0000000000312678                NetManNetProtStackAllocRxPacket
+                0x0000000000312610                NetManNetIFXmit
+                0x0000000000312778                NetManTxPacketDeQ
+                0x00000000003123c8                NetManToggleGlobalNetIFLinkState
+                0x00000000003124a0                NetManDeinit
+                0x00000000003126b8                NetManNetProtStackFreeRxPacket
+                0x00000000003127f8                NetManNetProtStackReallocRxPacket
+                0x00000000003123f8                NetManUpdateStackNIFLinkState
+                0x0000000000312738                NetManTxPacketNext
+                0x00000000003126f8                NetManNetProtStackEnQRxPacket
+                0x00000000003127b8                NetManTxPacketAfter
+                0x00000000003123e8                NetManGetGlobalNetIFLinkState
+                0x00000000003125c0                NetManUnregisterNetworkStack
+                0x00000000003124e8                NetManRegisterNetworkStack
+                0x0000000000312440                NetManInit
+                0x0000000000312640                NetManIoctl
+ .text          0x0000000000312838      0x5f8 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_server.o)
+                0x0000000000312928                NetManRPCAllocRxBuffers
+                0x0000000000312cb8                NetManInitRPCServer
+                0x0000000000312d60                NetManDeinitRPCServer
+ .text          0x0000000000312e30      0xa18 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_client.o)
+                0x0000000000313058                NetManRPCRegisterNetworkStack
+                0x00000000003137a0                NetManSetLinkMode
+                0x0000000000313620                NetManSetMainIF
+                0x00000000003131e8                NetManDeinitRPCClient
+                0x00000000003135e8                NetManRpcNetIFXmit
+                0x0000000000312ea0                NetManInitRPCClient
+                0x0000000000313150                NetManRPCUnregisterNetworkStack
+                0x00000000003136d8                NetManQueryMainIF
+                0x0000000000313258                NetManRpcIoctl
+ .text          0x0000000000313848      0x630 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o)
+                0x0000000000313848                ps2ip_getconfig
+                0x0000000000313d30                ps2ip_input
+                0x0000000000313908                ps2ip_setconfig
+                0x0000000000313e68                ps2ipSetHsyncTicksPerMSec
+                0x0000000000313d80                ps2ipInit
+                0x0000000000313e48                ps2ipDeinit
+ .text          0x0000000000313e78      0xa00 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sys_arch.o)
+                0x0000000000314460                sys_mbox_trypost
+                0x0000000000314730                sys_init
+                0x00000000003146d0                sys_sem_signal
+                0x00000000003143a0                sys_arch_mbox_fetch
+                0x00000000003140a0                sys_mbox_valid
+                0x0000000000314578                sys_sem_new
+                0x0000000000314038                sys_mbox_free
+                0x00000000003147d8                sys_arch_protect
+                0x00000000003140b0                sys_mbox_set_invalid
+                0x00000000003146f0                sys_sem_free
+                0x0000000000313f80                sys_mbox_new
+                0x0000000000313ee8                sys_thread_new
+                0x0000000000314720                sys_sem_set_invalid
+                0x00000000003145e8                sys_arch_sem_wait
+                0x00000000003147b0                sys_now
+                0x00000000003147f8                sys_arch_unprotect
+                0x0000000000314820                ps2ip_calloc64
+                0x0000000000314710                sys_sem_valid
+                0x00000000003143c0                sys_arch_mbox_tryfetch
+                0x0000000000314508                sys_mbox_post
+ .text          0x0000000000314878      0x540 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+                0x0000000000314880                netif_input
+                0x0000000000314c40                netif_set_netmask
+                0x00000000003148c0                netif_add
+                0x0000000000314b90                netif_set_ipaddr
+                0x0000000000314c68                netif_set_up
+                0x0000000000314c58                netif_set_default
+                0x0000000000314cf8                netif_set_down
+                0x0000000000314d38                netif_set_link_up
+                0x00000000003149a8                netif_set_addr
+                0x0000000000314d98                netif_set_link_down
+                0x0000000000314c28                netif_set_gw
+                0x0000000000314a48                netif_remove
+                0x0000000000314878                netif_init
+                0x0000000000314b20                netif_find
+ .text          0x0000000000314db8      0xf80 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o)
+                0x00000000003150c8                pbuf_realloc
+                0x0000000000315bf8                pbuf_memfind
+                0x00000000003152d8                pbuf_free
+                0x0000000000315408                pbuf_cat
+                0x00000000003153c8                pbuf_ref
+                0x0000000000315998                pbuf_fill_chksum
+                0x0000000000315648                pbuf_copy_partial
+                0x00000000003157a0                pbuf_take
+                0x0000000000315780                pbuf_skip
+                0x00000000003154f0                pbuf_copy
+                0x0000000000315a60                pbuf_try_get_at
+                0x0000000000314ec0                pbuf_alloc
+                0x0000000000315ca8                pbuf_strstr
+                0x0000000000315858                pbuf_take_at
+                0x0000000000315b08                pbuf_memcmp
+                0x00000000003152b0                pbuf_header_force
+                0x0000000000315a38                pbuf_get_at
+                0x00000000003153a0                pbuf_clen
+                0x0000000000315920                pbuf_coalesce
+                0x0000000000315288                pbuf_header
+                0x0000000000315468                pbuf_chain
+                0x0000000000315ab0                pbuf_put_at
+                0x0000000000315498                pbuf_dechain
+ .text          0x0000000000315d38      0xa90 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o)
+                0x00000000003160a8                udp_send_chksum
+                0x0000000000316688                udp_remove
+                0x0000000000316268                udp_sendto_if_src_chksum
+                0x0000000000316240                udp_sendto_if_src
+                0x00000000003160d8                udp_sendto
+                0x00000000003161a0                udp_sendto_if
+                0x00000000003161c8                udp_sendto_if_chksum
+                0x0000000000316660                udp_disconnect
+                0x0000000000316678                udp_recv
+                0x0000000000316598                udp_connect
+                0x0000000000316740                udp_new_ip_type
+                0x0000000000316488                udp_bind
+                0x0000000000316100                udp_sendto_chksum
+                0x0000000000316760                udp_netif_ip_addr_changed
+                0x0000000000316080                udp_send
+                0x0000000000315e40                udp_input
+                0x0000000000315d38                udp_init
+                0x00000000003166f0                udp_new
+ .text          0x00000000003167c8      0x220 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+                0x00000000003167c8                memp_init_pool
+                0x00000000003169b0                memp_free
+                0x00000000003168f8                memp_malloc
+                0x00000000003168c8                memp_malloc_pool
+                0x0000000000316818                memp_init
+                0x0000000000316988                memp_free_pool
+ .text          0x00000000003169e8     0x1ae8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+                0x0000000000318340                tcp_next_iss
+                0x0000000000317288                tcp_update_rcv_ann_wnd
+                0x0000000000317c18                tcp_txnow
+                0x0000000000318410                tcp_netif_ip_addr_changed
+                0x00000000003181d0                tcp_err
+                0x00000000003181b0                tcp_recv
+                0x0000000000318018                tcp_alloc
+                0x00000000003181a0                tcp_arg
+                0x0000000000316d88                tcp_shutdown
+                0x0000000000317e48                tcp_recv_null
+                0x0000000000316d50                tcp_close
+                0x00000000003172f0                tcp_recved
+                0x0000000000318210                tcp_pcb_purge
+                0x0000000000318160                tcp_new
+                0x0000000000317d68                tcp_segs_free
+                0x0000000000317028                tcp_bind
+                0x0000000000317008                tcp_abort
+                0x0000000000317d98                tcp_seg_free
+                0x00000000003169e8                tcp_init
+                0x0000000000317428                tcp_connect
+                0x00000000003181c0                tcp_sent
+                0x00000000003169f0                tcp_tmr
+                0x0000000000317de8                tcp_setprio
+                0x0000000000318360                tcp_eff_send_mss_impl
+                0x00000000003175d8                tcp_slowtmr
+                0x00000000003181e0                tcp_accept
+                0x0000000000317178                tcp_listen_with_backlog
+                0x0000000000318298                tcp_pcb_remove
+                0x0000000000316e58                tcp_abandon
+                0x00000000003184b8                tcp_debug_state_str
+                0x0000000000317b40                tcp_fasttmr
+                0x0000000000317c78                tcp_process_refused_data
+                0x0000000000318180                tcp_new_ip_type
+                0x0000000000317df0                tcp_seg_copy
+                0x0000000000318200                tcp_poll
+ .text          0x00000000003184d0      0x220 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ethernet.o)
+                0x00000000003184d0                ethernet_input
+                0x0000000000318630                ethernet_output
+ .text          0x00000000003186f0      0xe70 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(etharp.o)
+                0x0000000000319540                etharp_request
+                0x0000000000318bd0                etharp_cleanup_netif
+                0x0000000000318740                etharp_tmr
+                0x0000000000318d58                etharp_input
+                0x0000000000318c60                etharp_find_addr
+                0x0000000000318cf0                etharp_get_entry
+                0x0000000000319198                etharp_query
+                0x0000000000318ff0                etharp_output
+ .text          0x0000000000319560      0x538 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o)
+                0x0000000000319650                sys_timeouts_init
+                0x00000000003196c0                sys_timeout
+                0x0000000000319a10                sys_timeouts_mbox_fetch
+                0x0000000000319988                sys_restart_timeouts
+                0x00000000003195b8                tcp_timer_needed
+                0x00000000003197f0                sys_untimeout
+ .text          0x0000000000319a98      0x388 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(icmp.o)
+                0x0000000000319a98                icmp_input
+                0x0000000000319cf0                icmp_time_exceeded
+                0x0000000000319cc8                icmp_dest_unreach
+ .text          0x0000000000319e20      0x730 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4.o)
+                0x000000000031a4c0                ip4_output
+                0x000000000031a258                ip4_output_if
+                0x0000000000319e20                ip4_route
+                0x000000000031a2a0                ip4_output_if_src
+                0x0000000000319ed0                ip4_input
+ .text          0x000000000031a550      0x4b0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_addr.o)
+                0x000000000031a630                ipaddr_addr
+                0x000000000031a660                ip4addr_aton
+                0x000000000031a550                ip4_addr_isbroadcast_u32
+                0x000000000031a5b8                ip4_addr_netmask_valid
+                0x000000000031a8e8                ip4addr_ntoa
+                0x000000000031a910                ip4addr_ntoa_r
+ .text          0x000000000031aa00      0xc58 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_frag.o)
+                0x000000000031b438                ip4_frag
+                0x000000000031aa00                ip_reass_tmr
+                0x000000000031b0b0                ip4_reass
+ .text          0x000000000031b658      0x518 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(inet_chksum.o)
+                0x000000000031ba50                inet_chksum
+                0x000000000031b868                ip_chksum_pseudo
+                0x000000000031b808                inet_chksum_pseudo
+                0x000000000031ba78                inet_chksum_pbuf
+                0x000000000031b9c8                inet_chksum_pseudo_partial
+                0x000000000031b658                lwip_standard_chksum
+                0x000000000031bb30                lwip_chksum_copy
+                0x000000000031ba28                ip_chksum_pseudo_partial
+ .text          0x000000000031bb70     0x2570 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o)
+                0x000000000031c210                lwip_recvfrom
+                0x000000000031c6c0                lwip_sendmsg
+                0x000000000031bb78                lwip_socket_thread_cleanup
+                0x000000000031c5d0                lwip_send
+                0x000000000031d650                lwip_shutdown
+                0x000000000031c168                lwip_listen
+                0x000000000031cc48                lwip_writev
+                0x000000000031bf48                lwip_bind
+                0x000000000031d818                lwip_getpeername
+                0x000000000031cb50                lwip_socket
+                0x000000000031c090                lwip_connect
+                0x000000000031c988                lwip_sendto
+                0x000000000031cfb8                lwip_select
+                0x000000000031c588                lwip_read
+                0x000000000031dc70                lwip_setsockopt
+                0x000000000031d838                lwip_getsockname
+                0x000000000031d858                lwip_getsockopt
+                0x000000000031cc28                lwip_write
+                0x000000000031c5b0                lwip_recv
+                0x000000000031df88                lwip_ioctl
+                0x000000000031bb70                lwip_socket_thread_init
+                0x000000000031e028                lwip_fcntl
+                0x000000000031c000                lwip_close
+                0x000000000031bd40                lwip_accept
+ .text          0x000000000031e0e0      0x480 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+                0x000000000031e310                tcpip_send_msg_wait_sem
+                0x000000000031e3d0                tcpip_callbackmsg_new
+                0x000000000031e448                tcpip_trycallback
+                0x000000000031e428                tcpip_callbackmsg_delete
+                0x000000000031e470                tcpip_init
+                0x000000000031e538                mem_free_callback
+                0x000000000031e510                pbuf_free_callback
+                0x000000000031e370                tcpip_api_call
+                0x000000000031e1b8                tcpip_inpkt
+                0x000000000031e228                tcpip_input
+                0x000000000031e260                tcpip_callback_with_block
+ .text          0x000000000031e560     0x1f78 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+                0x000000000031ee38                dhcp_cleanup
+                0x000000000031ee78                dhcp_start
+                0x000000000031f060                dhcp_network_changed
+                0x000000000031f848                dhcp_release
+                0x000000000031f9a0                dhcp_stop
+                0x000000000031e9f8                dhcp_fine_tmr
+                0x000000000031f3e8                dhcp_renew
+                0x000000000031ef78                dhcp_inform
+                0x000000000031edf8                dhcp_set_struct
+                0x000000000031e918                dhcp_coarse_tmr
+                0x0000000000320498                dhcp_supplied_address
+ .text          0x00000000003204d8      0xdb0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dns.o)
+                0x00000000003211a0                dns_gethostbyname_addrtype
+                0x0000000000321180                dns_gethostbyname
+                0x0000000000320548                dns_setserver
+                0x0000000000320588                dns_getserver
+                0x00000000003205b8                dns_tmr
+                0x00000000003204d8                dns_init
+ .text          0x0000000000321288       0x58 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(lwip_init.o)
+                0x0000000000321288                lwip_init
+ .text          0x00000000003212e0       0x70 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(mem.o)
+                0x0000000000321310                mem_free
+                0x00000000003212e0                mem_init
+                0x00000000003212e8                mem_trim
+                0x00000000003212f0                mem_malloc
+                0x0000000000321330                mem_calloc
+ .text          0x0000000000321350     0x2480 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+                0x00000000003237b8                tcp_trigger_input_pcb_close
+                0x0000000000321350                tcp_input
+ .text          0x00000000003237d0     0x1bd8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_out.o)
+                0x0000000000324d20                tcp_rst
+                0x00000000003250d0                tcp_keepalive
+                0x0000000000324288                tcp_enqueue_flags
+                0x0000000000324ec0                tcp_rexmit_rto
+                0x0000000000323c50                tcp_write
+                0x0000000000324f30                tcp_rexmit
+                0x0000000000323908                tcp_send_fin
+                0x00000000003244f0                tcp_output
+                0x00000000003243c8                tcp_send_empty_ack
+                0x0000000000325030                tcp_rexmit_fast
+                0x00000000003251c8                tcp_zero_window_probe
+ .text          0x00000000003253a8      0x210 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(def.o)
+                0x0000000000325528                lwip_itoa
+                0x0000000000325478                lwip_stricmp
+                0x00000000003253a8                lwip_strnstr
+                0x00000000003254c8                lwip_strnicmp
+ .text          0x00000000003255b8      0x8b0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_lib.o)
+                0x0000000000325d90                netconn_shutdown
+                0x0000000000325d70                netconn_close
+                0x00000000003257f0                netconn_disconnect
+                0x0000000000325850                netconn_accept
+                0x00000000003256e0                netconn_getaddr
+                0x0000000000325790                netconn_connect
+                0x0000000000325bd8                netconn_sendto
+                0x0000000000325820                netconn_listen_with_backlog
+                0x0000000000325680                netconn_delete
+                0x0000000000325ac8                netconn_recv_tcp_pbuf
+                0x0000000000325c10                netconn_send
+                0x00000000003255f8                netconn_new_with_proto_and_callback
+                0x0000000000325c48                netconn_write_partly
+                0x0000000000325dc8                netconn_gethostbyname
+                0x0000000000325730                netconn_bind
+                0x0000000000325b10                netconn_recv
+ .text          0x0000000000325e68     0x1dc8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_msg.o)
+                0x0000000000326e90                lwip_netconn_do_bind
+                0x00000000003273f8                lwip_netconn_do_send
+                0x0000000000326840                netconn_free
+                0x0000000000327068                lwip_netconn_do_connect
+                0x0000000000327260                lwip_netconn_do_listen
+                0x00000000003266c8                lwip_netconn_do_newconn
+                0x0000000000327818                lwip_netconn_do_write
+                0x0000000000326ce0                lwip_netconn_do_delconn
+                0x0000000000327928                lwip_netconn_do_getaddr
+                0x0000000000327bd0                lwip_netconn_do_gethostbyname
+                0x0000000000326740                netconn_alloc
+                0x0000000000327a60                lwip_netconn_do_close
+                0x00000000003274e8                lwip_netconn_do_recv
+                0x00000000003271d0                lwip_netconn_do_disconnect
+ .text          0x0000000000327c30      0x2d8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_netbuf.o)
+                0x0000000000327c78                netbuf_delete
+                0x0000000000327cd0                netbuf_alloc
+                0x0000000000327c30                netbuf_new
+                0x0000000000327e80                netbuf_data
+                0x0000000000327d48                netbuf_free
+                0x0000000000327ec0                netbuf_next
+                0x0000000000327ef0                netbuf_first
+                0x0000000000327e28                netbuf_chain
+                0x0000000000327d90                netbuf_ref
+ .text          0x0000000000327f08       0x38 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(err.o)
+                0x0000000000327f08                err_to_errno
+
+.bss            0x0000000000327f80    0x49ed0
+ *(.bss)
+ .bss           0x0000000000327f80       0x30 loader.o
+ .bss           0x0000000000327fb0       0x20 networking.o
+ .bss           0x0000000000327fd0       0x28 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o)
+ *fill*         0x0000000000327ff8        0x8 00
+ .bss           0x0000000000328000     0x20c0 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_server.o)
+ .bss           0x000000000032a0c0     0x1180 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_client.o)
+ .bss           0x000000000032b240       0x40 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o)
+ .bss           0x000000000032b280      0x328 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sys_arch.o)
+ .bss           0x000000000032b5a8        0x2 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+ *fill*         0x000000000032b5aa        0x2 00
+ .bss           0x000000000032b5ac       0x30 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+ .bss           0x000000000032b5dc        0x4 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+ .bss           0x000000000032b5e0       0xf8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(etharp.o)
+ .bss           0x000000000032b6d8        0xc /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o)
+ .bss           0x000000000032b6e4        0x2 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4.o)
+ *fill*         0x000000000032b6e6        0x2 00
+ .bss           0x000000000032b6e8       0x10 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_addr.o)
+ .bss           0x000000000032b6f8        0x8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_frag.o)
+ .bss           0x000000000032b700       0xc0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o)
+ .bss           0x000000000032b7c0        0xc /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+ .bss           0x000000000032b7cc        0x8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+ *fill*         0x000000000032b7d4        0x4 00
+ .bss           0x000000000032b7d8      0x478 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dns.o)
+ .bss           0x000000000032bc50       0x38 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+ *(COMMON)
+ *fill*         0x000000000032bc88       0x78 00
+ COMMON         0x000000000032bd00    0x10000 loader.o
+                                          0x0 (size before relaxing)
+                0x000000000032bd00                _gp
+                0x0000000000333d00                pre_gp
+ COMMON         0x000000000033bd00    0x360ff /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+                                          0x0 (size before relaxing)
+                0x000000000033bd00                memp_memory_NETDB_base
+                0x000000000033be80                memp_memory_NETBUF_base
+                0x000000000033bf40                memp_memory_TCP_SEG_base
+                0x000000000033df80                memp_memory_PBUF_POOL_base
+                0x000000000036ffc0                memp_memory_TCPIP_MSG_API_base
+                0x0000000000370c80                memp_memory_PBUF_base
+                0x00000000003710c0                memp_memory_TCP_PCB_LISTEN_base
+                0x0000000000371300                memp_memory_REASSDATA_base
+                0x0000000000371480                memp_memory_UDP_PCB_base
+                0x00000000003715c0                memp_memory_NETCONN_base
+                0x0000000000371840                memp_memory_TCP_PCB_base
+                0x0000000000371c40                memp_memory_SYS_TIMEOUT_base
+ *fill*         0x0000000000371dff        0x1 00
+ COMMON         0x0000000000371e00       0x18 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371e00                ip_data
+ COMMON         0x0000000000371e18       0x38 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371e18                dhcp_rx_options_given
+                0x0000000000371e28                dhcp_rx_options_val
+
+.data           0x0000000000371e50       0x90
+ *(.data)
+ .data          0x0000000000371e50        0x4 networking.o
+ .data          0x0000000000371e54        0x4 logging.o
+ .data          0x0000000000371e58       0x10 time.o
+                0x0000000000371e60                __time_intr_overflow_count
+                0x0000000000371e58                __time_intr_overflow_id
+ .data          0x0000000000371e68        0x3 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o)
+ *fill*         0x0000000000371e6b        0x1 00
+ .data          0x0000000000371e6c       0x14 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_server.o)
+ .data          0x0000000000371e80       0x18 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_client.o)
+ .data          0x0000000000371e98       0x30 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o)
+                0x0000000000371e98                hsyncTicksPerMSec
+ .data          0x0000000000371ec8        0x2 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o)
+ *fill*         0x0000000000371eca        0x2 00
+ .data          0x0000000000371ecc        0x8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+ *fill*         0x0000000000371ed4        0x4 00
+ .data          0x0000000000371ed8        0x8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+
+.scommon        0x0000000000371ee0       0x35
+ *(.scommon)
+ .scommon       0x0000000000371ee0        0x8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371ee0                netif_list
+                0x0000000000371ee4                netif_default
+ .scommon       0x0000000000371ee8        0x1 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371ee8                pbuf_free_ooseq_pending
+ *fill*         0x0000000000371ee9        0x3 00
+ .scommon       0x0000000000371eec        0x4 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371eec                udp_pcbs
+ .scommon       0x0000000000371ef0       0x1c /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371ef0                tcp_active_pcbs_changed
+                0x0000000000371ef4                tcp_active_pcbs
+                0x0000000000371ef8                tcp_ticks
+                0x0000000000371f00                tcp_listen_pcbs
+                0x0000000000371f04                tcp_bound_pcbs
+                0x0000000000371f08                tcp_tw_pcbs
+ .scommon       0x0000000000371f0c        0x4 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371f0c                lock_tcpip_core
+ .scommon       0x0000000000371f10        0x4 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371f10                tcp_input_pcb
+ .scommon       0x0000000000371f14        0x1 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_msg.o)
+                                          0x0 (size before relaxing)
+                0x0000000000371f14                netconn_aborted
+
+.reginfo        0x0000000000000000       0x18
+ *(.reginfo)
+ .reginfo       0x0000000000000000       0x18 entry.o
+
+.mdebug         0x0000000000000018    0x17b34
+ *(.mdebug)
+ .mdebug        0x0000000000000018      0x158 entry.o
+ .mdebug        0x0000000000000170      0x458 loader.o
+ .mdebug        0x00000000000005c8      0x6a0 util.o
+ .mdebug        0x0000000000000c68      0x494 util_asm.o
+ .mdebug        0x00000000000010fc      0x72c networking.o
+ .mdebug        0x0000000000001828      0x2cc logging.o
+ .mdebug        0x0000000000001af4      0x42c time.o
+ .mdebug        0x0000000000001f20      0x148 hook.o
+ .mdebug        0x0000000000002068      0xc80 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o)
+ .mdebug        0x0000000000002ce8      0xbfc /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_server.o)
+ .mdebug        0x00000000000038e4      0xcd0 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_client.o)
+ .mdebug        0x00000000000045b4      0xf24 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o)
+ .mdebug        0x00000000000054d8     0x11ec /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sys_arch.o)
+ .mdebug        0x00000000000066c4      0xa4c /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+ .mdebug        0x0000000000007110     0x10a4 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o)
+ .mdebug        0x00000000000081b4      0xd5c /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o)
+ .mdebug        0x0000000000008f10      0xbf4 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+ .mdebug        0x0000000000009b04     0x1bac /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+ .mdebug        0x000000000000b6b0      0x2f8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ethernet.o)
+ .mdebug        0x000000000000b9a8      0x9ec /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(etharp.o)
+ .mdebug        0x000000000000c394      0x904 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o)
+ .mdebug        0x000000000000cc98      0x450 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(icmp.o)
+ .mdebug        0x000000000000d0e8      0x130 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip.o)
+ .mdebug        0x000000000000d218      0x568 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4.o)
+ .mdebug        0x000000000000d780      0x4b0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_addr.o)
+ .mdebug        0x000000000000dc30      0x798 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_frag.o)
+ .mdebug        0x000000000000e3c8      0x6c4 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(inet_chksum.o)
+ .mdebug        0x000000000000ea8c     0x1638 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o)
+ .mdebug        0x00000000000100c4      0xa7c /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+ .mdebug        0x0000000000010b40     0x15d8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+ .mdebug        0x0000000000012118      0xca8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dns.o)
+ .mdebug        0x0000000000012dc0      0x268 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(lwip_init.o)
+ .mdebug        0x0000000000013028      0x3c0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(mem.o)
+ .mdebug        0x00000000000133e8      0xc34 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+ .mdebug        0x000000000001401c      0xc00 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_out.o)
+ .mdebug        0x0000000000014c1c      0x340 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(def.o)
+ .mdebug        0x0000000000014f5c      0xf24 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_lib.o)
+ .mdebug        0x0000000000015e80     0x14d8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_msg.o)
+ .mdebug        0x0000000000017358      0x61c /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_netbuf.o)
+ .mdebug        0x0000000000017974      0x1d8 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(err.o)
+
+.comment        0x0000000000017b4c      0x2be
+ *(.comment)
+ .comment       0x0000000000017b4c       0x12 entry.o
+ .comment       0x0000000000017b5e       0x12 loader.o
+ .comment       0x0000000000017b70       0x12 util.o
+ .comment       0x0000000000017b82       0x12 networking.o
+ .comment       0x0000000000017b94       0x12 logging.o
+ .comment       0x0000000000017ba6       0x12 time.o
+ .comment       0x0000000000017bb8       0x12 hook.o
+ .comment       0x0000000000017bca       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(netman.o)
+ .comment       0x0000000000017bdc       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_server.o)
+ .comment       0x0000000000017bee       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_client.o)
+ .comment       0x0000000000017c00       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ps2ip.o)
+ .comment       0x0000000000017c12       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sys_arch.o)
+ .comment       0x0000000000017c24       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(netif.o)
+ .comment       0x0000000000017c36       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o)
+ .comment       0x0000000000017c48       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(udp.o)
+ .comment       0x0000000000017c5a       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+ .comment       0x0000000000017c6c       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+ .comment       0x0000000000017c7e       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ethernet.o)
+ .comment       0x0000000000017c90       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(etharp.o)
+ .comment       0x0000000000017ca2       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o)
+ .comment       0x0000000000017cb4       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(icmp.o)
+ .comment       0x0000000000017cc6       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip.o)
+ .comment       0x0000000000017cd8       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4.o)
+ .comment       0x0000000000017cea       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_addr.o)
+ .comment       0x0000000000017cfc       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_frag.o)
+ .comment       0x0000000000017d0e       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(inet_chksum.o)
+ .comment       0x0000000000017d20       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o)
+ .comment       0x0000000000017d32       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+ .comment       0x0000000000017d44       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+ .comment       0x0000000000017d56       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dns.o)
+ .comment       0x0000000000017d68       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(lwip_init.o)
+ .comment       0x0000000000017d7a       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(mem.o)
+ .comment       0x0000000000017d8c       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+ .comment       0x0000000000017d9e       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_out.o)
+ .comment       0x0000000000017db0       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(def.o)
+ .comment       0x0000000000017dc2       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_lib.o)
+ .comment       0x0000000000017dd4       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_msg.o)
+ .comment       0x0000000000017de6       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(api_netbuf.o)
+ .comment       0x0000000000017df8       0x12 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(err.o)
+
+.rodata         0x0000000000371f18      0x7b8
+ *(.rodata)
+ .rodata        0x0000000000371f18       0xa0 loader.o
+ .rodata        0x0000000000371fb8      0x178 networking.o
+ .rodata        0x0000000000372130       0x58 logging.o
+ .rodata        0x0000000000372188       0x68 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_server.o)
+ .rodata        0x00000000003721f0        0x8 /usr/local/ps2dev/ps2sdk/ee/lib/libnetman.a(rpc_client.o)
+ .rodata        0x00000000003721f8       0x90 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sys_arch.o)
+ .rodata        0x0000000000372288       0x14 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(pbuf.o)
+ *fill*         0x000000000037229c        0x4 00
+ .rodata        0x00000000003722a0       0xf0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(memp.o)
+                0x00000000003722f0                memp_NETBUF
+                0x00000000003722a0                memp_UDP_PCB
+                0x00000000003722d0                memp_TCP_SEG
+                0x00000000003722b0                memp_TCP_PCB
+                0x0000000000372300                memp_NETCONN
+                0x00000000003722c0                memp_TCP_PCB_LISTEN
+                0x0000000000372310                memp_TCPIP_MSG_API
+                0x00000000003722e0                memp_REASSDATA
+                0x0000000000372320                memp_SYS_TIMEOUT
+                0x0000000000372340                memp_PBUF
+                0x0000000000372350                memp_PBUF_POOL
+                0x0000000000372330                memp_NETDB
+                0x0000000000372360                memp_pools
+ .rodata        0x0000000000372390      0x110 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp.o)
+                0x0000000000372470                tcp_pcb_lists
+ .rodata        0x00000000003724a0       0x10 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ethernet.o)
+                0x00000000003724a0                ethbroadcast
+                0x00000000003724a8                ethzero
+ .rodata        0x00000000003724b0       0x30 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(timeouts.o)
+                0x00000000003724b0                lwip_cyclic_timers
+ .rodata        0x00000000003724e0       0x20 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(ip4_addr.o)
+                0x00000000003724e0                ip_addr_any
+                0x00000000003724e8                ip_addr_broadcast
+ .rodata        0x0000000000372500       0x14 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(sockets.o)
+ *fill*         0x0000000000372514        0x4 00
+ .rodata        0x0000000000372518       0x10 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcpip.o)
+ .rodata        0x0000000000372528       0xf0 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(dhcp.o)
+ .rodata        0x0000000000372618       0x28 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(tcp_in.o)
+ .rodata        0x0000000000372640       0x48 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(def.o)
+ .rodata        0x0000000000372688       0x48 /usr/local/ps2dev/ps2sdk/ee/lib/libps2ip.a(err.o)
+OUTPUT(out_us.bin binary)
+
+.mdebug.eabi64  0x00000000003726d0        0x0

@@ -1,0 +1,18 @@
+<html>
+<head>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/14082/FileSaver.js"></script>
+<script src="bins/dev9_irx.js"></script>
+<script src="bins/netman_irx.js"></script>
+<script src="bins/smap_irx.js"></script>
+<script src="bins/bin_us.js"></script>
+<script src="patcher.js"></script>
+</head>
+
+<body>
+	<div>Choose your Gitaroo Man .iso file and press the button on the right to save the patched .iso file</div>
+	<input type="file" id="fileinput">
+	<input type="button" onclick="convert()" value="Create Patched File">
+	<div id="savespot"></div>
+	<pre id="error" style="color:red"></pre>
+</body>
+</html>

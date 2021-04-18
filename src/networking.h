@@ -1,0 +1,1 @@
+int InitConnection(void);
