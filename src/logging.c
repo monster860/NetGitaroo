@@ -1,4 +1,3 @@
-#include <ps2ip.h>
 #include <stdio.h>
 #include <string.h>
 #include "logging.h"
@@ -36,13 +35,13 @@ void InitLogging(void) {
 static int curr_client = -1;
 
 void LogStr(const char* str, int length) {
-	if(curr_client >= 0) {
+	/*if(curr_client >= 0) {
 		lwip_write(curr_client, str, length);
-	}
+	}*/
 }
 
 void InitLogging(void) {
-	int sockfd;
+	/*int sockfd;
 	struct sockaddr_in address;
 	int opt = 1;
 	
@@ -77,5 +76,5 @@ void InitLogging(void) {
 			}
 			curr_client = client;
 		}
-	}
+	}*/
 }

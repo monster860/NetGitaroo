@@ -9,9 +9,10 @@ INPUT(
 	logging.o
 	time.o
 	hook.o
+  multi_menu.o
 )
 INPUT(libnetman.a)
-INPUT(libps2ip.a)
+/*INPUT(libps2ip.a)*/
 
 SECTIONS {
   .text : { *(.text) }

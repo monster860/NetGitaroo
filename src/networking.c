@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <netman.h>
-#include <ps2ip.h>
 #include <kernel.h>
 #include <stdlib.h>
 #include "networking.h"
 #include "logging.h"
 
-static struct ip4_addr IP, NM, GW, DNS;
-
+//static struct ip4_addr IP, NM, GW, DNS;
+/*
 static int ethApplyIPConfig(int use_dhcp, const struct ip4_addr *ip, const struct ip4_addr *netmask, const struct ip4_addr *gateway, const struct ip4_addr *dns)
 {
 	t_ip_info ip_info;
@@ -51,7 +50,7 @@ static int ethApplyIPConfig(int use_dhcp, const struct ip4_addr *ip, const struc
 	}
 
 	return result;
-}
+}*/
 static void EthStatusCheckCb(s32 alarm_id, u16 time, void *common)
 {
 	iWakeupThread(*(int*)common);
@@ -78,12 +77,13 @@ static int ethGetNetIFLinkStatus(void)
 {
 	return(NetManIoctl(NETMAN_NETIF_IOCTL_GET_LINK_STATUS, NULL, 0, NULL, 0) == NETMAN_NETIF_ETH_LINK_STATE_UP);
 }
-
+/*
 static int ethWaitValidNetIFLinkState(void)
 {
 	return WaitValidNetState(&ethGetNetIFLinkStatus);
 }
-
+*/
+/*
 static int ethGetDHCPStatus(void)
 {
 	t_ip_info ip_info;
@@ -99,12 +99,13 @@ static int ethGetDHCPStatus(void)
 
 	return result;
 }
-
+*/
+/*
 static int ethWaitValidDHCPState(void)
 {
 	return WaitValidNetState(&ethGetDHCPStatus);
 }
-
+*/
 static int connection_manager_tid = -1;
 
 static void ConnectionManagerThread() {
@@ -116,13 +117,13 @@ static void ConnectionManagerThread() {
 	int lmr = NetManSetLinkMode(NETMAN_NETIF_ETH_LINK_MODE_10M_FDX);
 	printf("NetManSetLinkMode returned %d.\n", lmr);
 
-	ip4_addr_set_zero(&IP);
-	ip4_addr_set_zero(&NM);
-	ip4_addr_set_zero(&GW);
-	ip4_addr_set_zero(&DNS);
+	//ip4_addr_set_zero(&IP);
+	//ip4_addr_set_zero(&NM);
+	//ip4_addr_set_zero(&GW);
+	//ip4_addr_set_zero(&DNS);
 
-	printf("Initializing ps2ip\n");
-	ps2ipInit(&IP, &NM, &GW);
+	//printf("Initializing ps2ip\n");
+	/*ps2ipInit(&IP, &NM, &GW);
 	ethApplyIPConfig(1, &IP, &NM, &GW, &DNS);
 	printf("Waiting for connection...\n");
 	if(ethWaitValidNetIFLinkState() != 0) {
@@ -142,12 +143,12 @@ static void ConnectionManagerThread() {
 	printf("Initialized:\n");
 
 	InitLogging();
-
+*/
 	SleepThread();
 
 	return;
 	end:
-	ps2ipDeinit();
+	//ps2ipDeinit();
 	NetManDeinit();
 	return;
 }

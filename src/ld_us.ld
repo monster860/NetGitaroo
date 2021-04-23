@@ -48,7 +48,13 @@ AddIntcHandler = 0x12c500;
 RemoveIntcHandler = 0x12c520;
 EnableIntc = 0x12d310;
 DisableIntc = 0x12d2a8;
-
 FrameWait = 0x1c8a80;
+MultiMenuUpdatePads = 0x2186c0;
+MultiMenuInitUi = 0x213c90;
+MultiMenuHandleScreen = 0x2101c0;
+MultiMenuChangeScreen = 0x217a80;
+MultiMenuLoop = 0x218880;
+AddNewUiSprite = 0x105ae0;
+_gp = 0x26C470;
 
 INCLUDE ld_main.ld

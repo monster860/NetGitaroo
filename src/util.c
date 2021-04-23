@@ -224,6 +224,9 @@ int strncmp( const char * s1, const char * s2, size_t n )
 }
 
 unsigned long long __udivdi3(unsigned long long a, unsigned long long b) {
+	if(a > 0xFFFFFFFF) {
+		return (unsigned long long)(((unsigned int)a >> 16ull) / (unsigned int)b) << 16ull;
+	}
 	return ((unsigned int)a / (unsigned int)b);
 }
 

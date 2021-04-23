@@ -12,10 +12,12 @@ ee-ld -Map out_us.map -L$(echo -n $PS2SDK)/ee/lib -T ld_us.ld
 
 cd ..
 mkdir -p final-patcher/bins
-./utils/file-to-js.sh $PS2SDK/iop/irx/ps2dev9.irx dev9_irx > final-patcher/bins/dev9_irx.js
-./utils/file-to-js.sh $PS2SDK/iop/irx/netman.irx netman_irx > final-patcher/bins/netman_irx.js
-./utils/file-to-js.sh $PS2SDK/iop/irx/smap.irx smap_irx > final-patcher/bins/smap_irx.js
+./utils/file-to-js.sh application/octet-binary $PS2SDK/iop/irx/ps2dev9.irx dev9_irx > final-patcher/bins/dev9_irx.js
+./utils/file-to-js.sh application/octet-binary $PS2SDK/iop/irx/netman.irx netman_irx > final-patcher/bins/netman_irx.js
+./utils/file-to-js.sh application/octet-binary $PS2SDK/iop/irx/smap.irx smap_irx > final-patcher/bins/smap_irx.js
 
-./utils/file-to-js.sh src/out_us.bin bin_us > final-patcher/bins/bin_us.js
+./utils/file-to-js.sh image/png images/MARUCHI_patch.png maruchi_patch > final-patcher/bins/maruchi_patch.js
+
+./utils/file-to-js.sh application/octet-binary src/out_us.bin bin_us > final-patcher/bins/bin_us.js
 
 cd $cwd

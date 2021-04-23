@@ -55,7 +55,14 @@ const valid_elf_filenames = {
 		preloader_binsize_upper_offset: 0x1C,
 		preloader_binsize_lower_offset: 0x20,
 		preloader_location: 0x26460C,
-		bin: bin_us
+		bin: bin_us,
+		image_patches: [
+			{
+				xgm: "PROJECTS/STDATA/US/VS_SEL/VS_SEL.XGM;1",
+				imx: "MARUCHI.IMX",
+				overlay: maruchi_patch
+			}
+		]
 	}
 };
 async function convert() {
@@ -165,6 +172,28 @@ async function convert() {
 		preloader_dv.setUint16(elf_properties.preloader_binsize_lower_offset, binsize_lower, true);
 		replacements.push([teo+elf_properties.preloader_location, new Blob([preloader])]);
 
+		for(let image_patch of elf_properties.image_patches) {
+			let imx_file;
+			if(image_patch.xgm) {
+				let xgm_file = await find_file(infile, image_patch.xgm, root_dir);	
+				imx_file = await find_in_xgm(infile, xgm_file.lba, image_patch.imx);
+			} else {
+				let f = await find_file(infile, image_patch.imx, root_dir);
+				imx_file = {offset: f.lba*2048, length: f.size};
+			}
+			let imx = read_imx(await infile.slice(imx_file.offset, imx_file.offset+imx_file.length).arrayBuffer());
+			document.body.appendChild(imx.canvas);
+			let overlay = new Image();
+			let promise = new Promise((resolve, reject) => {
+				overlay.onload = resolve;
+				overlay.onerror = reject;
+			})
+			overlay.src = image_patch.overlay;
+			await promise;
+			imx.canvas.getContext("2d").drawImage(overlay, 0, 0);
+			replacements.push(get_imx_patch(imx, imx_file.offset));
+		}
+
 		console.log(replacements);
 		console.log(addendums);
 
@@ -205,6 +234,7 @@ function buf_uint32(n) {
 	dv.setUint32(0, n, true);
 	return buf;
 }
+
 function make_dir_entry(filename, size, lba) {
 	let date = new Date();
 	let buf = new ArrayBuffer(((33 + filename.length) + 16) & ~1); // for some reason ps2 has 0 bytes here dunno why but it doesnt work without it I guess
@@ -279,6 +309,45 @@ async function read_directory(blob, dir_lba) {
 		files: files,
 		end: i
 	}
+}
+
+async function find_file(blob, path, dir_meta) {
+	let parts = path.split(/[\/\\]/g);
+	let file;
+	for(let i = 0; i < parts.length; i++) {
+		file = null;
+		for(let f of dir_meta.files) {
+			if(f.filename == parts[i]) {
+				file = f;
+				break;
+			}
+		}
+		if(!file) throw new Error(path + " not found (on part " + parts[i] + ")");
+		if(i != parts.length-1) dir_meta = await read_directory(blob, file.lba);
+	}
+	return file;
+}
+
+async function find_in_xgm(blob, lba, name) {
+	let off = lba*2048;
+	let num_textures = new DataView(await blob.slice(off,off+4).arrayBuffer()).getUint32(0, true);
+	off += 8;
+	for(let i = 0; i < num_textures; i++) {
+		let nulled_name = name + "\0";
+		let compared_name = await blob.slice(off+256, off+256+nulled_name.length).text();
+		console.log(compared_name);
+		let file_size = new DataView(await blob.slice(off+0x114,off+0x118).arrayBuffer()).getUint32(0, true);
+		console.log(file_size);
+		if(compared_name == nulled_name) {
+			return {
+				offset: off+0x130,
+				length: file_size
+			};
+		} else {
+			off += file_size + 0x130;
+		}
+	}
+	throw new Error("Failed to find " + name + " in XGM file");
 }
 
 function up_to_sector(loc) {
