@@ -44,6 +44,30 @@ typedef struct {
 	int pads[4];
 } MultiMenuPads;
 
+typedef struct {
+	int trace_state; // 0 means nothing, 1 means you can press button now, 2 means its too late
+	int trace_ready;
+	float unk_08;
+	float trace_accuracy;
+	float unk_10;
+	float trace_dir;
+	float unk_18;
+	float unk_1c;
+	float unk_20;
+	float unk_24;
+	float unk_28;
+	float unk_2c;
+} InGamePad;
+
+typedef struct {
+	int a;
+	int b;
+	int miss_flag;
+	int hit_type;
+} PlayerStatusResult;
+
+void HandleInGameInputs(void* a0, unsigned int time, int a2, int a3, int t0, InGamePad* t1, int player_num, int t3, float stick_x, float stick_y);
+
 #define MM_PAD_X 0x1
 #define MM_PAD_TRIANGLE 0x2
 #define MM_PAD_UP_HELD 0x20
@@ -60,5 +84,14 @@ void MultiMenuHandleScreen(void *multi_menu);
 void MultiMenuChangeScreen(void *multi_menu, int screen_id);
 
 int MultiMenuLoop(int);
+
+void ShowToast(void*);
+void UpdatePlayerStatus(PlayerStatusResult*, void*, void*, int, int, int);
+
+// Some function that crashes the game sometimes for some IOP-related reason.
+int CrashyFunc(void *a0, int a1, int a2, int a3);
+
+// Some other function that causes the above crash when failing
+int GetFile(void *a0, char *a1, int a2, int a3, int t0);
 
 #endif

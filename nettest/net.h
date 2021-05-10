@@ -111,7 +111,7 @@ struct packet_buffer {
 	unsigned char transmitting;
 } ALIGNED(64);
 
-#define NUM_PACKET_BUFFERS (NETMAN_RPC_BLOCK_SIZE+1)
+#define NUM_PACKET_BUFFERS (NETMAN_RPC_BLOCK_SIZE_LESSER+1)
 #define NUM_TX_PACKET_BUFFERS (16)
 extern struct packet_buffer packet_buffers[NUM_PACKET_BUFFERS];
 extern struct packet_buffer tx_packet_buffers[NUM_TX_PACKET_BUFFERS];

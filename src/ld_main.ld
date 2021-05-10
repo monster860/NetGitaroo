@@ -10,6 +10,7 @@ INPUT(
 	time.o
 	hook.o
   multi_menu.o
+  game_net.o
 )
 INPUT(libnetman.a)
 /*INPUT(libps2ip.a)*/

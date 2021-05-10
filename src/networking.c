@@ -2,59 +2,34 @@
 #include <netman.h>
 #include <kernel.h>
 #include <stdlib.h>
+#include <ps2sdkapi.h>
 #include "networking.h"
+#include "game_net.h"
 #include "logging.h"
 
-//static struct ip4_addr IP, NM, GW, DNS;
-/*
-static int ethApplyIPConfig(int use_dhcp, const struct ip4_addr *ip, const struct ip4_addr *netmask, const struct ip4_addr *gateway, const struct ip4_addr *dns)
+hwaddr_t BROADCAST_HWADDR = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+hwaddr_t our_hwaddr = {0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc};
+hwaddr_t NULL_HWADDR = {0,0,0,0,0,0};
+ipaddr_t IP_ANY = {0,0,0,0};
+ipaddr_t IP_BROADCAST = {255,255,255,255};
+ipaddr_t our_ip = {0, 0, 0, 0};
+ipaddr_t gateway_ip = {0, 0, 0, 0};
+ipaddr_t subnet_mask = {0,0,0,0};
+ipaddr_t logging_client_ip = {0,0,0,0};
+hwaddr_t logging_client_hwaddr = {0,0,0,0,0,0};
+
+unsigned short ip_id_ctr = 0;
+
+static int ethGetNetIFLinkStatus(void)
 {
-	t_ip_info ip_info;
-	const ip_addr_t *dns_curr;
-	int result;
+	return(NetManIoctl(NETMAN_NETIF_IOCTL_GET_LINK_STATUS, NULL, 0, NULL, 0) == NETMAN_NETIF_ETH_LINK_STATE_UP);
+}
 
-	//SMAP is registered as the "sm0" device to the TCP/IP stack.
-	if ((result = ps2ip_getconfig("sm0", &ip_info)) >= 0)
-	{
-		//Obtain the current DNS server settings.
-		dns_curr = dns_getserver(0);
-
-		//Check if it's the same. Otherwise, apply the new configuration.
-		if ((use_dhcp != ip_info.dhcp_enabled)
-		    ||	(!use_dhcp &&
-			 (!ip_addr_cmp(ip, (struct ip4_addr *)&ip_info.ipaddr) ||
-			 !ip_addr_cmp(netmask, (struct ip4_addr *)&ip_info.netmask) ||
-			 !ip_addr_cmp(gateway, (struct ip4_addr *)&ip_info.gw) ||
-			 !ip_addr_cmp(dns, dns_curr))))
-		{
-			if (use_dhcp)
-			{
-				ip_info.dhcp_enabled = 1;
-			}
-			else
-			{	//Copy over new settings if DHCP is not used.
-				ip_addr_set((struct ip4_addr *)&ip_info.ipaddr, ip);
-				ip_addr_set((struct ip4_addr *)&ip_info.netmask, netmask);
-				ip_addr_set((struct ip4_addr *)&ip_info.gw, gateway);
-
-				ip_info.dhcp_enabled = 0;
-			}
-
-			//Update settings.
-			result = ps2ip_setconfig(&ip_info);
-			if (!use_dhcp)
-				dns_setserver(0, dns);
-		}
-		else
-			result = 0;
-	}
-
-	return result;
-}*/
 static void EthStatusCheckCb(s32 alarm_id, u16 time, void *common)
 {
 	iWakeupThread(*(int*)common);
 }
+
 static int WaitValidNetState(int (*checkingFunction)(void))
 {
 	int ThreadID, retry_cycles;
@@ -73,42 +48,516 @@ static int WaitValidNetState(int (*checkingFunction)(void))
 	return 0;
 }
 
-static int ethGetNetIFLinkStatus(void)
-{
-	return(NetManIoctl(NETMAN_NETIF_IOCTL_GET_LINK_STATUS, NULL, 0, NULL, 0) == NETMAN_NETIF_ETH_LINK_STATE_UP);
-}
-/*
 static int ethWaitValidNetIFLinkState(void)
 {
 	return WaitValidNetState(&ethGetNetIFLinkStatus);
 }
-*/
-/*
-static int ethGetDHCPStatus(void)
-{
-	t_ip_info ip_info;
-	int result;
 
-	if ((result = ps2ip_getconfig("sm0", &ip_info)) >= 0)
-	{	//Check for a successful state if DHCP is enabled.
-		if (ip_info.dhcp_enabled)
-			result = (ip_info.dhcp_status == DHCP_STATE_BOUND || (ip_info.dhcp_status == DHCP_STATE_OFF));
-		else
-			result = -1;
+struct dhcp_state {
+	ps2_clock_t start_time;
+	ps2_clock_t last_req_time;
+	int num_retries;
+	ipaddr_t dhcp_server_ip;
+	hwaddr_t dhcp_server_hwaddr;
+	unsigned short xid_lower;
+	unsigned short xid_upper;
+	unsigned char state;
+};
+
+struct dhcp_state *dhcp_holder = NULL;
+int dhcp_sema;
+unsigned char link_up = 0;
+
+unsigned char dhcp_cookie[] = {
+	0x63, 0x82, 0x53, 0x63
+};
+
+unsigned char dhcp_discover_options[] = {
+	0x35, 0x1, 0x1,
+	0x39, 0x02, 0x05, 0xdc,
+	0x37, 0x04, 0x1, 0x3, 0x1c, 0x6,
+	0xff
+};
+unsigned char dhcp_request_options[] = {
+	53, 1, 3,
+	50, 4, 0, 0, 0, 0,
+	54, 4, 0, 0, 0, 0,
+	0xFF
+};
+
+void _process_dhcp(void) {
+	if(dhcp_holder == NULL) return;
+	if(!link_up) {
+		free(dhcp_holder);
+		dhcp_holder = NULL;
+		return;
 	}
+	if((ps2_clock() - dhcp_holder->last_req_time) > PS2_CLOCKS_PER_SEC) {
+		if(dhcp_holder->num_retries > 20) {
+			// consider this a fail
+			free(dhcp_holder);
+			dhcp_holder = NULL;
+			return;
+		} else {
+			// udp_datagram_t *MakeUdpPacket(struct packet_buffer **out_buf, ipaddr_t *dst, hwaddr_t *dst_hwaddr, unsigned short src_port, unsigned short dst_port, unsigned short payload_length, unsigned char priority);
+			if(dhcp_holder->state == 0 || dhcp_holder->state == 2) {
+				struct packet_buffer *buf;
+				udp_datagram_t *dg;
+				dg = MakeUdpPacket(&buf, &dhcp_holder->dhcp_server_ip, &dhcp_holder->dhcp_server_hwaddr, 68, 67, sizeof(dhcp_packet_t)+68, NET_PRIORITY_DHCP);
+				if(!buf) return;
+				dhcp_packet_t *dhcp = (dhcp_packet_t*)dg->payload;
+				memset(dhcp, 0, sizeof(dhcp_packet_t)+32);
+				dhcp->op = DHCP_OP_BOOTREQUEST;
+				dhcp->htype = 1;
+				dhcp->hlen = 6;
+				dhcp->hops = 0;
+				dhcp->xid_lower = dhcp_holder->xid_lower;
+				dhcp->xid_upper = dhcp_holder->xid_upper;
+				unsigned short seconds = (ps2_clock() - dhcp_holder->start_time) / PS2_CLOCKS_PER_SEC;
+				dhcp->secs = HTONS(seconds);
+				dhcp->flags = 0;
+				if(dhcp_holder->state == 0) {
+					IP_SET(dhcp->ciaddr, IP_ANY);
+					IP_SET(dhcp->yiaddr, IP_ANY);
+					IP_SET(dhcp->siaddr, IP_ANY);
+					IP_SET(dhcp->giaddr, IP_ANY);
+				} else if(dhcp_holder->state == 2) {
+					IP_SET(dhcp->ciaddr, our_ip);
+					IP_SET(dhcp->yiaddr, IP_ANY);
+					IP_SET(dhcp->siaddr, dhcp_holder->dhcp_server_ip);
+					IP_SET(dhcp->giaddr, IP_ANY);
+				}
+				HWADDR_SET(dhcp->chaddr, our_hwaddr);
+				
+				memcpy(dhcp->cookie, dhcp_cookie, sizeof(dhcp_cookie));
 
-	return result;
+				if(dhcp_holder->state == 0) {
+					memcpy(dhcp->options, dhcp_discover_options, sizeof(dhcp_discover_options));
+				} else if(dhcp_holder->state == 2) {
+					dhcp_request_options[5+0] = our_ip.bytes[0];
+					dhcp_request_options[5+1] = our_ip.bytes[1];
+					dhcp_request_options[5+2] = our_ip.bytes[2];
+					dhcp_request_options[5+3] = our_ip.bytes[3];
+
+					dhcp_request_options[11+0] = dhcp_holder->dhcp_server_ip.bytes[0];
+					dhcp_request_options[11+1] = dhcp_holder->dhcp_server_ip.bytes[1];
+					dhcp_request_options[11+2] = dhcp_holder->dhcp_server_ip.bytes[2];
+					dhcp_request_options[11+3] = dhcp_holder->dhcp_server_ip.bytes[3];
+
+					memcpy(dhcp->options, dhcp_request_options, sizeof(dhcp_request_options));
+				}
+				
+				FinalizeUdpChecksum(dg);
+
+				AddTxPacket(buf);
+				dhcp_holder->num_retries++;
+				dhcp_holder->last_req_time = ps2_clock();
+			}
+		}
+	}
 }
-*/
-/*
-static int ethWaitValidDHCPState(void)
-{
-	return WaitValidNetState(&ethGetDHCPStatus);
+void process_dhcp(void) {
+	WaitSema(dhcp_sema);
+	_process_dhcp();
+	SignalSema(dhcp_sema);
 }
-*/
+
+void _begin_dhcp(void) {
+	if(dhcp_holder != NULL) {
+		return;
+	}
+	dhcp_holder = malloc(sizeof(struct dhcp_state));
+	dhcp_holder->num_retries = 0;
+	dhcp_holder->start_time = ps2_clock();
+	dhcp_holder->last_req_time = 0;
+	dhcp_holder->num_retries = 0;
+	dhcp_holder->state = 0;
+	dhcp_holder->xid_lower = rand();
+	dhcp_holder->xid_upper = rand();
+	IP_SET(dhcp_holder->dhcp_server_ip, IP_BROADCAST);
+	HWADDR_SET(dhcp_holder->dhcp_server_hwaddr, BROADCAST_HWADDR);
+
+	IP_SET(our_ip, IP_ANY);
+	IP_SET(gateway_ip, IP_ANY);
+	IP_SET(subnet_mask, IP_ANY);
+
+	_process_dhcp();
+}
+void begin_dhcp(void) {
+	WaitSema(dhcp_sema);
+	_begin_dhcp();
+	SignalSema(dhcp_sema);
+}
+
+void _HandleDhcp(dhcp_packet_t *dhcp, ethernet_frame_t *in_frame) {
+	if(dhcp_holder == NULL) {
+		return;
+	}
+	if(dhcp->op != DHCP_OP_BOOTREPLY || dhcp->htype != 1 || dhcp->hlen != 6 || dhcp->xid_lower != dhcp_holder->xid_lower || dhcp->xid_upper != dhcp_holder->xid_upper)
+		return;
+	dhcp_holder->dhcp_server_hwaddr = in_frame->source;
+	int oi = 0;
+	unsigned char dhcp_type = 0;
+	ipaddr_t recv_subnet_mask = {0,0,0,0};
+	ipaddr_t recv_router = {0,0,0,0};
+	ipaddr_t recv_dhcp_server = {255,255,255,255};
+	while(oi < 500 && dhcp->options[oi] != 0xFF) {
+		unsigned char option_type = dhcp->options[oi++];
+		unsigned char option_len = dhcp->options[oi++];
+
+		if(option_type == 53) {
+			dhcp_type = dhcp->options[oi];
+		} else if(option_type == 1) {
+			recv_subnet_mask.bytes[0] = dhcp->options[oi+0];
+			recv_subnet_mask.bytes[1] = dhcp->options[oi+1];
+			recv_subnet_mask.bytes[2] = dhcp->options[oi+2];
+			recv_subnet_mask.bytes[3] = dhcp->options[oi+3];
+		} else if(option_type == 3) {
+			recv_router.bytes[0] = dhcp->options[oi+0];
+			recv_router.bytes[1] = dhcp->options[oi+1];
+			recv_router.bytes[2] = dhcp->options[oi+2];
+			recv_router.bytes[3] = dhcp->options[oi+3];
+		} else if(option_type == 54) {
+			recv_dhcp_server.bytes[0] = dhcp->options[oi+0];
+			recv_dhcp_server.bytes[1] = dhcp->options[oi+1];
+			recv_dhcp_server.bytes[2] = dhcp->options[oi+2];
+			recv_dhcp_server.bytes[3] = dhcp->options[oi+3];
+		}
+
+		oi += option_len;
+	}
+	if(dhcp_type == DHCPOFFER && dhcp_holder->state == 0) {
+		IP_SET(our_ip, dhcp->yiaddr);
+		IP_SET(gateway_ip, recv_router);
+		IP_SET(subnet_mask, recv_subnet_mask);
+		IP_SET(dhcp_holder->dhcp_server_ip, recv_dhcp_server);
+		dhcp_holder->num_retries = 0;
+		dhcp_holder->last_req_time = 0;
+		dhcp_holder->state = 2;
+	} else if(dhcp_type == DHCPACK && dhcp_holder->state == 2) {
+		free(dhcp_holder);
+		dhcp_holder = NULL;
+		return; // We success~!
+	} else if(dhcp_type == DHCPNACK && dhcp_holder->state == 2) {
+		free(dhcp_holder);
+		dhcp_holder = NULL;
+		_begin_dhcp(); // we fail :(
+	}
+	_process_dhcp();
+}
+
+void HandleDhcp(dhcp_packet_t *dhcp, ethernet_frame_t *in_frame) {
+	WaitSema(dhcp_sema);
+	_HandleDhcp(dhcp, in_frame);
+	SignalSema(dhcp_sema);
+}
+
+void LinkStateUp(void) {
+	printf("Link up~!\n");
+	link_up = 1;
+	begin_dhcp();
+}
+void LinkStateDown(void) {
+	printf("Link down~!\n");
+	link_up = 0;
+}
+int has_failed_alloc = 0;
+void *AllocRxPacket(unsigned int size, void **payload) {
+	DI();
+	struct packet_buffer *buf = free_packet_buffer;
+	if(buf != NULL) {
+		free_packet_buffer = buf->next;
+		EI();
+		buf->next = NULL;
+		buf->size = size;
+		*payload = buf->data;
+	} else if(!has_failed_alloc) {
+		EI();
+		has_failed_alloc = 1;
+		printf("FAILED ALLOC!\n");
+	}
+	return buf;
+}
+void FreeRxPacket(void *packet) {
+	struct packet_buffer *buf = packet;
+	DI();
+	buf->next = free_packet_buffer;
+	free_packet_buffer = buf;
+	EI();
+}
+
+unsigned short CalcHeaderChecksum(ip_header_t *header) {
+	int i;
+	int num_shorts = (header->version_ihl & 0xF) << 1;
+	unsigned short *as_shorts = (unsigned short*) header;
+	unsigned int running_total = 0;
+	for(i = 0; i < num_shorts; i++) {
+		if(i != 5)
+			running_total += NTOHS(as_shorts[i]);
+	}
+	unsigned short checksum = (running_total & 0xFFFF) + ((running_total >> 16) & 0xFFFF);
+	checksum = (checksum & 0xFFFF) + ((checksum >> 16) & 0xFFFF);
+	return ~HTONS(checksum);
+}
+
+void *MakeIpPacket(struct packet_buffer **out_buf, ipaddr_t *dst, hwaddr_t *dst_hwaddr, unsigned char protocol, unsigned short payload_length, unsigned char priority) {
+	struct packet_buffer *buf = AllocTxPacket(priority);
+	if(buf == NULL) {
+		return NULL;
+	}
+	*out_buf = buf;
+	ethernet_frame_t *frame = (ethernet_frame_t *)buf->data;
+	HWADDR_SET(frame->destination, *dst_hwaddr);
+	HWADDR_SET(frame->source, our_hwaddr);
+	frame->type = HTONS(0x0800);
+	ip_header_t *header = (ip_header_t*)frame->payload;
+	header->version_ihl = 0x45;
+	header->dscp_ecn = 0;
+	header->total_length = HTONS(20 + payload_length);
+	header->identification = ip_id_ctr++;
+	header->flags_fragment_offset = 0;
+	header->ttl = 0x80;
+	header->protocol = protocol;
+	IP_SET(header->source_ip, our_ip);
+	IP_SET(header->destination_ip, *dst);
+	header->header_checksum = CalcHeaderChecksum(header);
+	buf->size = sizeof(ethernet_frame_t) + 20 + payload_length;
+	return (void*)((int)header + 20);
+}
+
+udp_datagram_t *MakeUdpPacket(struct packet_buffer **out_buf, ipaddr_t *dst, hwaddr_t *dst_hwaddr, unsigned short src_port, unsigned short dst_port, unsigned short payload_length, unsigned char priority) {
+	struct packet_buffer *buf = NULL;
+	udp_datagram_t *datagram = MakeIpPacket(&buf, dst, dst_hwaddr, 17, payload_length + 8, priority);
+	*out_buf = buf;
+	if(datagram == NULL) {
+		return NULL;
+	}
+	unsigned int checksum = 0;
+	checksum += NTOHS(dst->shorts[0]);
+	checksum += NTOHS(dst->shorts[1]);
+	checksum += NTOHS(our_ip.shorts[0]);
+	checksum += NTOHS(our_ip.shorts[1]);
+	checksum += 17;
+	checksum += payload_length + 8;
+
+	checksum = (checksum & 0xFFFF) + ((checksum >> 16) & 0xFFFF);
+	checksum = (checksum & 0xFFFF) + ((checksum >> 16) & 0xFFFF);
+
+	unsigned short short_checksum = checksum;
+
+	datagram->src_port = HTONS(src_port);
+	datagram->dst_port = HTONS(dst_port);
+	datagram->length = HTONS(payload_length + 8);
+	datagram->checksum = ~HTONS(short_checksum);
+	return datagram;
+}
+
+void FinalizeUdpChecksum(udp_datagram_t *datagram) {
+	unsigned short *as_shorts = (unsigned short*)datagram;
+	int amt_shorts = NTOHS(datagram->length) >> 1;
+	unsigned short short_checksum = ~NTOHS(datagram->checksum);
+	unsigned int checksum = short_checksum;
+	int i;
+	for(i = 0; i < amt_shorts; i++) {
+		if(i != 3)
+			checksum += NTOHS(as_shorts[i]);
+	}
+	
+	checksum = (checksum & 0xFFFF) + ((checksum >> 16) & 0xFFFF);
+	checksum = (checksum & 0xFFFF) + ((checksum >> 16) & 0xFFFF);
+	short_checksum = checksum;
+	datagram->checksum = ~HTONS(short_checksum);
+}
+
+void HandleIp(ip_header_t *header, ethernet_frame_t *in_frame) {
+	void* payload = (void*)((int)header + ((header->version_ihl & 0xF) << 2));
+	if((header->version_ihl & 0xF0) != 0x40 || (NTOHS(header->flags_fragment_offset) & 0x4fff) != 0)
+		return;
+	unsigned short checksum = CalcHeaderChecksum(header);
+	if(checksum != header->header_checksum) {
+		printf("CHECKSUMS DONT MATCH (%i, %i)\n", NTOHS(checksum), NTOHS(header->header_checksum));
+		return;
+	}
+	if(header->protocol == 17) {
+		udp_datagram_t *dg = payload;
+		if(dg->src_port == HTONS(67) && dg->dst_port == HTONS(68)) {
+			// Handle DHCP stuff before checking the IP
+			HandleDhcp((dhcp_packet_t*)dg->payload, in_frame);
+			return;
+		}
+	}
+	if(!IP_EQ(header->destination_ip, our_ip) && !IP_EQ(header->destination_ip, IP_BROADCAST)) {
+		return;
+	}
+	
+	if(header->protocol == 17) {
+		udp_datagram_t *dg = payload;
+		if(dg->dst_port == HTONS(LOGGING_PORT)) {
+			HandleLoggingPacket(dg, in_frame, header);
+		} else if(HandleUdpGameNet(dg, in_frame, header)) {/**/}
+	}
+}
+
+void HandleArp(arp_packet_t *arp, ethernet_frame_t *in_frame) {
+	if(arp->htype != HTONS(1) || arp->ptype != HTONS(0x0800) || arp->hlen != 6 || arp->plen != 4) {
+		return;
+	}
+	if(arp->oper == HTONS(1) && IP_EQ(arp->target_ip, our_ip)) {
+		struct packet_buffer *reply_buf = AllocTxPacket(NET_PRIORITY_ARP);
+		if(reply_buf != NULL) {
+			ethernet_frame_t *frame = (ethernet_frame_t*)reply_buf->data;
+			HWADDR_SET(frame->destination, in_frame->source);
+			HWADDR_SET(frame->source, our_hwaddr);
+			frame->type = HTONS(0x0806);
+			arp_packet_t *reply_arp = (arp_packet_t*)frame->payload;
+			reply_arp->htype = HTONS(1);
+			reply_arp->ptype = HTONS(0x0800);
+			reply_arp->hlen = 6;
+			reply_arp->plen = 4;
+			reply_arp->oper = HTONS(2);
+			IP_SET(reply_arp->sender_ip, our_ip);
+			HWADDR_SET(reply_arp->sender_hw, our_hwaddr);
+			IP_SET(reply_arp->target_ip, arp->sender_ip);
+			HWADDR_SET(reply_arp->target_hw, arp->sender_hw);
+			reply_buf->size = sizeof(*frame) + sizeof(*reply_arp);
+			AddTxPacket(reply_buf);
+		} else {
+			return;
+		}
+	} else if(arp->oper == HTONS(2) && IP_EQ(arp->sender_ip, gn_remote_ip_or_gateway) && gn_state == GN_CONNECTING_ARP) {
+		printf("Received ARP for joining remote game\n");
+		HWADDR_SET(gn_remote_hwaddr, arp->sender_hw);
+		gn_state = GN_CONNECTING;
+	}
+}
+
+void EnQRxPacket(void *packet) {
+	struct packet_buffer *buf = packet;
+	ethernet_frame_t *frame = (ethernet_frame_t*)&buf->data;
+	if(HWADDR_EQ(frame->destination, our_hwaddr) || HWADDR_EQ(frame->destination, BROADCAST_HWADDR)) {
+		if(frame->type == HTONS(0x0806)) { // arp
+			HandleArp((arp_packet_t*)frame->payload, frame);
+		} else if(frame->type == HTONS(0x0800)) {
+			HandleIp((ip_header_t*)frame->payload, frame);
+		}
+	}
+	
+	// We MUST free the packet before returning or the RX thread will hang in an infinite loop until this is freed.
+	FreeRxPacket(packet);
+
+	process_dhcp();
+}
+
+// Gets the next packet to transmit
+int NextTxPacket(void **payload) {
+	DI();
+	if(next_tx_packet_buffer != NULL) {
+		next_tx_packet_buffer->transmitting = 1;
+		*payload = next_tx_packet_buffer->data;
+		EI();
+		return next_tx_packet_buffer->size;
+	}
+	EI();
+	return 0;
+}
+
+// the last packet has been transmitted
+void DeQTxPacket(void) {
+	if(next_tx_packet_buffer != NULL) {
+		DI();
+		struct packet_buffer* next = next_tx_packet_buffer->next;
+		next_tx_packet_buffer->next = free_tx_packet_buffer;
+		free_tx_packet_buffer = next_tx_packet_buffer;
+		next_tx_packet_buffer = next;
+		EI();
+	}
+}
+
+struct packet_buffer *AllocTxPacket(unsigned char priority) {
+	struct packet_buffer *buf;
+	DI();
+	if(free_tx_packet_buffer != NULL) {
+		buf = free_tx_packet_buffer;
+		free_tx_packet_buffer = buf->next;
+		EI();
+		buf->priority = priority;
+		buf->transmitting = 0;
+		return buf;
+	} else {
+		struct packet_buffer *next_yoink = next_tx_packet_buffer;
+		while(next_yoink != NULL) {
+			if(!next_yoink->transmitting && priority <= next_yoink->priority) {
+				buf = next_yoink;
+			}
+			next_yoink = next_yoink->next;
+		}
+		if(buf != NULL) {
+			if(buf == next_tx_packet_buffer) {
+				next_tx_packet_buffer = buf->next;
+			} else {
+				next_yoink = next_tx_packet_buffer;
+				while(next_yoink != NULL) {
+					if(next_yoink->next == buf) {
+						next_yoink->next = buf->next;
+						break;
+					}
+					next_yoink = next_yoink->next;
+				}
+			}
+		}
+		EI();
+		buf->priority = priority;
+		buf->transmitting = 0;
+		return buf;
+	}
+	EI();
+	return NULL;
+}
+
+void AddTxPacket(struct packet_buffer *packet) {
+	DI();
+	packet->next = NULL;
+	packet->transmitting = 0;
+	if(!next_tx_packet_buffer) {
+		next_tx_packet_buffer = packet;
+	} else {
+		struct packet_buffer *last = next_tx_packet_buffer;
+		while(last->next != NULL) {
+			last = last->next;
+		}
+		last->next = packet;
+	}
+	EI();
+	NetManNetIFXmit();
+}
+
+// Gets the next next packet to transmit
+int AfterTxPacket(void **payload) {
+	DI();
+	if(next_tx_packet_buffer != NULL && next_tx_packet_buffer->next != NULL) {
+		*payload = next_tx_packet_buffer->next->data;
+		next_tx_packet_buffer->next->transmitting = 1;
+		EI();
+		return next_tx_packet_buffer->next->size;
+	}
+	EI();
+	return 0;
+}
+void ReallocRxPacket(void *packet, unsigned int size) {
+	((struct packet_buffer *)packet)->size = size;
+}
+
+struct packet_buffer packet_buffers[NUM_PACKET_BUFFERS];
+struct packet_buffer tx_packet_buffers[NUM_TX_PACKET_BUFFERS];
+struct packet_buffer *free_packet_buffer = NULL;
+struct packet_buffer *free_tx_packet_buffer = NULL;
+struct packet_buffer *next_tx_packet_buffer = NULL;
+
 static int connection_manager_tid = -1;
 
 static void ConnectionManagerThread() {
+	ee_sema_t sema;
+	int i;
 	//Wait for the link to become ready.
 	printf("NetManInit\n");
 	NetManInit();
@@ -117,38 +566,43 @@ static void ConnectionManagerThread() {
 	int lmr = NetManSetLinkMode(NETMAN_NETIF_ETH_LINK_MODE_10M_FDX);
 	printf("NetManSetLinkMode returned %d.\n", lmr);
 
-	//ip4_addr_set_zero(&IP);
-	//ip4_addr_set_zero(&NM);
-	//ip4_addr_set_zero(&GW);
-	//ip4_addr_set_zero(&DNS);
+	sema.init_count = 1;
+	sema.max_count = 1;
+	sema.option = 0;
+	dhcp_sema = CreateSema(&sema);
 
-	//printf("Initializing ps2ip\n");
-	/*ps2ipInit(&IP, &NM, &GW);
-	ethApplyIPConfig(1, &IP, &NM, &GW, &DNS);
-	printf("Waiting for connection...\n");
-	if(ethWaitValidNetIFLinkState() != 0) {
-		printf("Error: failed to get valid link status.\n");
-		goto end;
+	for(i = 0; i < NUM_PACKET_BUFFERS-1; i++) {
+		packet_buffers[i].next = &packet_buffers[i+1];
 	}
+	packet_buffers[NUM_PACKET_BUFFERS-1].next = NULL;
+	free_packet_buffer = &packet_buffers[0];
 
-	printf("Waiting for DHCP lease...\n");
-	//Wait for DHCP to initialize, if DHCP is enabled.
-	if (ethWaitValidDHCPState() != 0)
-	{
-		printf("DHCP failed\n.");
-		goto end;
+	for(i = 0; i < NUM_TX_PACKET_BUFFERS-1; i++) {
+		tx_packet_buffers[i].next = &tx_packet_buffers[i+1];
 	}
-	printf("done!\n");
+	tx_packet_buffers[NUM_TX_PACKET_BUFFERS-1].next = NULL;
+	free_tx_packet_buffer = &tx_packet_buffers[0];
 
-	printf("Initialized:\n");
+	static struct NetManNetProtStack stack={
+		&LinkStateUp,
+		&LinkStateDown,
+		&AllocRxPacket,
+		&FreeRxPacket,
+		&EnQRxPacket,
+		&NextTxPacket,
+		&DeQTxPacket,
+		&AfterTxPacket,
+		&ReallocRxPacket
+	};
 
-	InitLogging();
-*/
+	NetManIoctl(NETMAN_NETIF_IOCTL_ETH_GET_MAC, NULL, 0, &our_hwaddr, sizeof(our_hwaddr));
+
+	NetManRegisterNetworkStack(&stack);
+
 	SleepThread();
 
 	return;
 	end:
-	//ps2ipDeinit();
 	NetManDeinit();
 	return;
 }

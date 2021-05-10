@@ -62,6 +62,19 @@ const valid_elf_filenames = {
 				imx: "MARUCHI.IMX",
 				overlay: maruchi_patch
 			}
+		],
+		imc_files_to_patch: [
+			//'PROJECTS/STDATA/US/STAGE00/SONGDATA/ST00.IMC;1', // not used for multiplayer
+			'PROJECTS/STDATA/US/STAGE01/SONGDATA/ST01.IMC;1',
+			'PROJECTS/STDATA/US/STAGE02/SONGDATA/ST02.IMC;1',
+			'PROJECTS/STDATA/US/STAGE03/SONGDATA/ST03.IMC;1',
+			//'PROJECTS/STDATA/US/STAGE04/SONGDATA/ST04.IMC;1', // not used for multiplayer
+			'PROJECTS/STDATA/US/STAGE05/SONGDATA/ST05.IMC;1',
+			//'PROJECTS/STDATA/US/STAGE06/SONGDATA/ST06.IMC;1', // not used for multiplayer
+			'PROJECTS/STDATA/US/STAGE07/SONGDATA/ST07.IMC;1',
+			'PROJECTS/STDATA/US/STAGE08/SONGDATA/ST08.IMC;1',
+			//'PROJECTS/STDATA/US/STAGE09/SONGDATA/ST09.IMC;1', // not used for multiplayer
+			'PROJECTS/STDATA/US/STAGE10/SONGDATA/ST10.IMC;1'
 		]
 	}
 };
@@ -194,6 +207,12 @@ async function convert() {
 			replacements.push(get_imx_patch(imx, imx_file.offset));
 		}
 
+		
+		for(let name of elf_properties.imc_files_to_patch) {
+			let file = await find_file(infile, name, root_dir);
+			replacements.push(...(await reduce_packet_size(infile, file.lba)));
+		}
+
 		console.log(replacements);
 		console.log(addendums);
 
@@ -302,7 +321,6 @@ async function read_directory(blob, dir_lba) {
 			entry_loc: i
 		};
 		files.push(file);
-		console.log(file.filename + " (" + file.size + " bytes)");
 		i += record_length;
 	}
 	return {
@@ -335,9 +353,7 @@ async function find_in_xgm(blob, lba, name) {
 	for(let i = 0; i < num_textures; i++) {
 		let nulled_name = name + "\0";
 		let compared_name = await blob.slice(off+256, off+256+nulled_name.length).text();
-		console.log(compared_name);
 		let file_size = new DataView(await blob.slice(off+0x114,off+0x118).arrayBuffer()).getUint32(0, true);
-		console.log(file_size);
 		if(compared_name == nulled_name) {
 			return {
 				offset: off+0x130,

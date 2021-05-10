@@ -55,6 +55,12 @@ MultiMenuHandleScreen = 0x2101c0;
 MultiMenuChangeScreen = 0x217a80;
 MultiMenuLoop = 0x218880;
 AddNewUiSprite = 0x105ae0;
+rand = 0x1425e8;
+CrashyFunc = 0x23dee0;
+GetFile = 0x23dc50;
+HandleInGameInputs = 0x118a30;
+ShowToast = 0x1aa8e0;
+UpdatePlayerStatus = 0x19da20;
 _gp = 0x26C470;
 
 INCLUDE ld_main.ld

@@ -2,3 +2,7 @@ final-patcher/bins/
 *.o
 src/*.bin
 src/*.map
+obj
+*.a
+*.erl
+*.irx
