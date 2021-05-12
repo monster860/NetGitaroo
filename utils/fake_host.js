@@ -2,7 +2,7 @@ const dgram = require('dgram');
 const readline = require('readline');
 const {promisify} = require('util');
 
-const GN_PACKETID_CONNECT = 33865;
+const GN_PACKETID_CONNECT = 33866;
 const GN_PACKETID_ACK = 8478;
 const GN_PACKETID_GAMESTATE = 48347;
 

@@ -2,6 +2,8 @@ let isomime = "application/x-iso9660-image";
 
 let elf_offset = -0xFFF80;
 
+let ver_str = "v1_1";
+
 const valid_elf_filenames = {
 	"SLUS_202.94;1": {
 		initial_heapstart: 0x311280,
@@ -241,7 +243,7 @@ async function convert() {
 		console.log(parts);
 		let outfile = new Blob(parts, {type:isomime});
 		console.log(outfile.size);
-		saveAs(outfile, elf_filename.substring(0, elf_filename.length-2) + ".netgitaroo.iso");
+		saveAs(outfile, elf_filename.substring(0, elf_filename.length-2) + ".netgitaroo_" + ver_str + ".iso");
 	} catch(e) {
 		console.error(e);
 		document.getElementById("error").textContent = e;

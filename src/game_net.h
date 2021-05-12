@@ -10,7 +10,7 @@
 #define GN_CONNECTED 4
 
 // modify this for different versions I guess
-#define GN_PACKETID_CONNECT 33865
+#define GN_PACKETID_CONNECT 33866
 
 #define GN_PACKETID_ACK 8478
 #define GN_PACKETID_GAMESTATE 48347

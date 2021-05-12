@@ -119,8 +119,10 @@ void hUpdatePlayerStatus(PlayerStatusResult* result, void* player_struct, void* 
 		*(void**)(player_struct + 0x280) = 0;
 		*(void**)(player_struct + 0x284) = 0;
 		float pre_health_adj = *(float*)(health_struct + 0x170);
+		float pre_health_adj_2 = *(float*)(other_health_struct + 0x170);
 		oUpdatePlayerStatus(result, player_struct, a2, a3, t0, t1);
 		*(float*)(health_struct + 0x170) = pre_health_adj;
+		*(float*)(other_health_struct + 0x170) = pre_health_adj_2;
 		*(void**)(player_struct + 0x278) = toast_1;
 		*(void**)(player_struct + 0x27C) = toast_2;
 		*(void**)(player_struct + 0x280) = toast_3;
