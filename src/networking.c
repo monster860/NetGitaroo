@@ -20,39 +20,6 @@ hwaddr_t logging_client_hwaddr = {0,0,0,0,0,0};
 
 unsigned short ip_id_ctr = 0;
 
-static int ethGetNetIFLinkStatus(void)
-{
-	return(NetManIoctl(NETMAN_NETIF_IOCTL_GET_LINK_STATUS, NULL, 0, NULL, 0) == NETMAN_NETIF_ETH_LINK_STATE_UP);
-}
-
-static void EthStatusCheckCb(s32 alarm_id, u16 time, void *common)
-{
-	iWakeupThread(*(int*)common);
-}
-
-static int WaitValidNetState(int (*checkingFunction)(void))
-{
-	int ThreadID, retry_cycles;
-
-	// Wait for a valid network status;
-	ThreadID = GetThreadId();
-	for(retry_cycles = 0; checkingFunction() == 0; retry_cycles++)
-	{	//Sleep for 1000ms.
-		SetAlarm(1000 * 16, &EthStatusCheckCb, &ThreadID);
-		SleepThread();
-
-		if(retry_cycles >= 10)	//10s = 10*1000ms
-			return -1;
-	}
-
-	return 0;
-}
-
-static int ethWaitValidNetIFLinkState(void)
-{
-	return WaitValidNetState(&ethGetNetIFLinkStatus);
-}
-
 struct dhcp_state {
 	ps2_clock_t start_time;
 	ps2_clock_t last_req_time;
@@ -260,6 +227,7 @@ void LinkStateUp(void) {
 void LinkStateDown(void) {
 	printf("Link down~!\n");
 	link_up = 0;
+	gn_state = GN_IDLE;
 }
 int has_failed_alloc = 0;
 void *AllocRxPacket(unsigned int size, void **payload) {
@@ -553,9 +521,7 @@ struct packet_buffer *free_packet_buffer = NULL;
 struct packet_buffer *free_tx_packet_buffer = NULL;
 struct packet_buffer *next_tx_packet_buffer = NULL;
 
-static int connection_manager_tid = -1;
-
-static void ConnectionManagerThread() {
+int InitConnection(void) {
 	ee_sema_t sema;
 	int i;
 	//Wait for the link to become ready.
@@ -598,36 +564,5 @@ static void ConnectionManagerThread() {
 	NetManIoctl(NETMAN_NETIF_IOCTL_ETH_GET_MAC, NULL, 0, &our_hwaddr, sizeof(our_hwaddr));
 
 	NetManRegisterNetworkStack(&stack);
-
-	SleepThread();
-
-	return;
-	end:
-	NetManDeinit();
-	return;
-}
-
-int InitConnection(void) {
-	ee_thread_t thp;
-	int rv;
-
-	if(connection_manager_tid >= 0) return 1;
-
-	thp.attr = 0;
-	thp.option = 0;
-	thp.func = ConnectionManagerThread;
-	thp.stack_size = 0x600;
-	thp.stack = malloc(0x600);
-	thp.initial_priority = 0x18;
-	if((connection_manager_tid = CreateThread(&thp)) < 0) {
-		printf("Failed to create connection thread!\n");
-		return 0;
-	}
-	if((rv = StartThread(connection_manager_tid, NULL)) < 0) {
-		printf("connection thread: StartThread failed, %d\n", rv);
-		DeleteThread(connection_manager_tid);
-		return 0;
-	}
-	printf("Started connection manager thread.\n");
 	return 1;
 }

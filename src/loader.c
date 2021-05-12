@@ -22,6 +22,7 @@ static int oFrameWait_buf[4];
 static void (*oFrameWait)(void);
 static void hFrameWait(void) {
 	process_dhcp();
+	if(gn_ingame && gn_state == GN_CONNECTED) send_game_state();
 	if(frame_wait_tid >= 0) {
 		frame_waiting_tid = GetThreadId();
 		frame_wait_status = 1;
@@ -42,46 +43,10 @@ static void h_puts_internal(const char *str) {
 	o_puts_internal(str);
 }
 
-// Crash happens at 197300
-//int CrashyFunc(void *a0, int a1, int a2, int a3);
-static int oCrashyFunc_buffer[4];
-static int (*oCrashyFunc)(void *a0, int a1, int a2, int a3);
-static int hCrashyFunc(void *a0, int a1, int a2, int a3) {
-	if(a0 == NULL) {
-		printf("PREVENTED CRASH!\n");
-		return 1;
-	}
-	return oCrashyFunc(a0, a1, a2, a3);
-}
 
-static void GetFileAlarmCB(int alarm_id, unsigned short time, void * thingy) {
+void WakeupCB(int alarm_id, unsigned short time, void * thingy) {
 	iWakeupThread(*(int*)thingy);
 }
-
-//int GetFile(void *a0, char *a1, int a2, int a3, int t0);
-static int oGetFile_buffer[4];
-static int (*oGetFile)(void *a0, char *a1, int a2, int a3, int t0);
-static int hGetFile(void *a0, char *a1, int a2, int a3, int t0) {
-	int i;
-	int tid;
-	tid = GetThreadId();
-	for(i = 0; i < 10; i++) {
-		int result = oGetFile(a0, a1, a2, a3, t0);
-		if(result) {
-			return result;
-		}
-		printf("Sleeping\n");
-
-		SetAlarm(8000, GetFileAlarmCB, (void*)&tid);
-		SleepThread();
-
-		printf("Trying again\n");
-	}
-	printf("Failed...\n");
-	SleepThread(); // so that we at least get networking
-	return 0;
-}
-
 
 void FrameWaitThread() {
 	while(1) {
@@ -129,8 +94,6 @@ void load_mod(void) {
 	// Insert hooks
 	oFrameWait = CreateHook(FrameWait, hFrameWait, oFrameWait_buf);
 	o_puts_internal = CreateHook(puts_internal, h_puts_internal, o_puts_internal_buffer);
-	//oCrashyFunc = CreateHook(CrashyFunc, hCrashyFunc, oCrashyFunc_buffer);
-	//oGetFile = CreateHook(GetFile, hGetFile, oGetFile_buffer);
 	init_multi_menu_hooks();
 	init_game_net_hooks();
 

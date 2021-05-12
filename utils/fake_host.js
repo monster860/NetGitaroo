@@ -18,10 +18,17 @@ const game_state_struct = [
 	["attack_accum", "f32"],
 	["stick_x", "s8"],
 	["stick_y", "s8"],
+	["flags", "u8"],
+	["next_cue", "u8"],
+	["ctr_miss", "u8"],
+	["ctr_ok", "u8"],
+	["ctr_good", "u8"],
+	["ctr_great", "u8"],
 	["in_game", "u8"],
 	["mm_screen", "u8"],
 	["mm_song", "u8"],
-	["mm_character", "u8"]
+	["mm_character", "u8"],
+	["mm_ready", "u8"],
 ];
 const number_sizes = {
 	"u32": 4,
@@ -64,6 +71,7 @@ let rl = readline.createInterface({
 const sock = dgram.createSocket('udp4');
 let remote_address = null;
 let remote_port = null;
+let delay = 0.0;
 
 sock.on('error', (err) => {
 	console.error(err);
@@ -81,9 +89,24 @@ sock.on('message', (msg, rinfo) => {
 		console.log("Got connect packet from " + remote_address + ":" + remote_port);
 		has_displayed = false;
 		resend();
+	} else if(!hosting && initialized && (type == GN_PACKETID_ACK)) {
+		console.log("Got ack packet from " + remote_address + ":" + remote_port);
+		has_displayed = false;
+		resend();
 	} else if(initialized && type == GN_PACKETID_GAMESTATE) {
 		disp_dv = dv;
+		let remote_game_state = {};
+		decode(remote_game_state, dv);
 		redisplay();
+		if(remote_game_state.in_game == 3) {
+			setTimeout(() => {
+				our_game_state.time = remote_game_state.time;
+				our_game_state.stick_x = remote_game_state.stick_x;
+				our_game_state.stick_y = remote_game_state.stick_y;
+				our_game_state.flags = (our_game_state.flags & ~3) | (remote_game_state.flags & 3);
+				resend();
+			}, delay);
+		}
 	}
 });
 
@@ -94,13 +117,24 @@ sock.on('listening', () => {
 
 let disp_dv;
 
+function decode(state_obj, dv) {
+	let n = 0;
+	for(let [name, type] of game_state_struct) {
+		n = Math.ceil(n / number_sizes[type]) * number_sizes[type];
+		stat_obj[name] = dv["get"+number_funcs[type]](n+2, true);
+		n += number_sizes[type];
+	}
+	our_ga
+}
+
 function resend() {
 	let dv = new DataView(new ArrayBuffer(2 + game_state_size));
 	let n = 0;
 	dv.setUint16(0, GN_PACKETID_GAMESTATE, true);
 	for(let [name, type] of game_state_struct) {
 		n = Math.ceil(n / number_sizes[type]) * number_sizes[type];
-		dv["set"+number_funcs[type]](n+2, our_game_state[name], true);
+		dv["set"+number_funcs[type]](n+2, our_game_state[name] || 0, true);
+		n += number_sizes[type];
 	}
 	our_game_state.seq_num++;
 	sock.send(new Uint8Array(dv.buffer), remote_port, remote_address);
@@ -140,6 +174,15 @@ rl.on('line', (input) => {
 			hosting = true;
 			initialized = true;
 			sock.bind(GAME_PORT);
+		} else if(input.startsWith("join ")) {
+			let [cmd, ip, port] = input.split(" ");
+			remote_address = ip;
+			remote_port = port;
+			let dv2 = new DataView(new ArrayBuffer(2));
+			dv2.setUint16(0, GN_PACKETID_CONNECT, true);
+			sock.send(new Uint8Array(dv2.buffer), remote_port, remote_address);
+			initialized = true;
+			hosting = false;
 		}
 	} else {
 		if(input.startsWith("set ")) {
@@ -148,5 +191,10 @@ rl.on('line', (input) => {
 			display(resend());
 			console.log();
 		}
+	}
+	if(input.startsWith("delay ")) {
+		let [cmd, d] = input.split(" ");
+		delay = +d || 0;
+		console.log("Updating delay to " + delay);
 	}
 })

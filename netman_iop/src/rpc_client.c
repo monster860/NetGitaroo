@@ -117,7 +117,8 @@ void *NetManRpcNetProtStackAllocRxPacket(unsigned int length, void **payload)
 	volatile const struct NetManBD *bd = &FrameBufferStatus[EEFrameBufferWrPtr];
 
 	//Wait for a free spot to appear in the ring buffer.
-	while(bd->length != 0) { }
+	//while(bd->length != 0) { }
+	if(bd->length != 0) return NULL;
 
 	//Allocation of PBUF descriptors is tied with the allocation of frame slots in the ring buffer by EnQ.
 	result = &pbufs[EEFrameBufferWrPtr];

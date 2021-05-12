@@ -10,3 +10,5 @@ void init_multi_menu_hooks(void);
 #define MM_PLAYER_CHARACTER(a, b) (*(int*)(a + 0x85c + b*80))
 #define MM_PLAYER_MAXCHAR(a, b) (*(int*)(a + 0x88c + b*80))
 #define MM_PLAYER_READY(a, b) (*(int*)(a + 0x858 + b*80))
+#define MM_PLAYER_READY2(a, b) (*(int*)(a + 0x884 + b*80))
+#define MM_PLAYER_STARTHEALTH(a, b) (*(float*)(a + 0x888 + b*80))

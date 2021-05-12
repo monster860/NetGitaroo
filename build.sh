@@ -27,6 +27,7 @@ mkdir -p final-patcher/bins
 ./utils/file-to-js.sh application/octet-binary $PS2SDK/iop/irx/smap.irx smap_irx > final-patcher/bins/smap_irx.js
 
 ./utils/file-to-js.sh image/png images/MARUCHI_patch.png maruchi_patch > final-patcher/bins/maruchi_patch.js
+./utils/file-to-js.sh image/png images/TITLE_patch.png title_patch > final-patcher/bins/title_patch.js
 
 ./utils/file-to-js.sh application/octet-binary src/out_us.bin bin_us > final-patcher/bins/bin_us.js
 

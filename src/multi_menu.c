@@ -202,6 +202,18 @@ int hMultiMenuLoop(int skip_multitap_screen) {
 	multi_menu_additions = NULL;
 
 	if(ret == 0) {
+		if(gn_state == GN_CONNECTED) {
+			// tell the other client we're out of there.
+			struct packet_buffer *out_buf;
+			udp_datagram_t *dg = MakeUdpPacket(&out_buf, &gn_remote_ip, &gn_remote_hwaddr, gn_src_port, gn_remote_port, (sizeof(struct game_state) + 3) & ~1, NET_PRIORITY_GAME);
+			if(dg != NULL) {
+				our_game_state.seq_num++;
+				*(short*)dg->payload = GN_PACKETID_FIN;
+				*(struct game_state *)(dg->payload + 2) = our_game_state;
+				FinalizeUdpChecksum(dg);
+				AddTxPacket(out_buf);
+			}
+		}
 		gn_state = GN_IDLE; // make sure to disconnect;
 	}
 
@@ -267,9 +279,9 @@ void hMultiMenuHandleScreen(void *multi_menu) {
 			int remote_character = MM_PLAYER_CHARACTER(multi_menu, gn_remote_playernum);
 			if(remote_game_state.mm_character != remote_character && curr_song == remote_game_state.mm_song) {
 				if(menu_id == 3) {
-					if(remote_game_state.mm_character > remote_character) {
+					if(remote_game_state.mm_character < remote_character) {
 						pads->pads[gn_remote_playernum] |= MM_PAD_LEFT;
-					} else if(remote_game_state.mm_character < remote_character) {
+					} else if(remote_game_state.mm_character > remote_character) {
 						pads->pads[gn_remote_playernum] |= MM_PAD_RIGHT;
 					}
 					do_update = 0;
@@ -280,6 +292,30 @@ void hMultiMenuHandleScreen(void *multi_menu) {
 						MM_PLAYER_CHARACTER(multi_menu, gn_remote_playernum) = remote_game_state.mm_character;
 				}
 			}
+			if(menu_id == 4) {
+				float hdiff = MM_PLAYER_STARTHEALTH(multi_menu, gn_remote_playernum) - (remote_game_state.health * 100.0f);
+				if(hdiff >= 0.5f) {
+					pads->pads[gn_remote_playernum] |= MM_PAD_DOWN_HELD;
+					do_update = 0;
+				} else if(hdiff < -0.5f) {
+					pads->pads[gn_remote_playernum] |= MM_PAD_UP_HELD;
+					do_update = 0;
+				}
+			}
+			if(gn_our_playernum == 0 && do_update && menu_id == 3) {
+				if(remote_game_state.mm_ready >= 3 && MM_PLAYER_READY(multi_menu, gn_remote_playernum)) {
+					pads->pads[gn_remote_playernum] |= MM_PAD_X;
+				} else if(remote_game_state.mm_ready < 3 && !MM_PLAYER_READY(multi_menu, gn_remote_playernum)) {
+					pads->pads[gn_remote_playernum] |= MM_PAD_TRIANGLE;
+				}
+			} else if(gn_our_playernum == 0 && do_update && menu_id == 4) {
+				if(remote_game_state.mm_ready >= 4 && !MM_PLAYER_READY2(multi_menu, gn_remote_playernum)) {
+					pads->pads[gn_remote_playernum] |= MM_PAD_X;
+				} else if(remote_game_state.mm_ready < 4 && MM_PLAYER_READY2(multi_menu, gn_remote_playernum)) {
+					pads->pads[gn_remote_playernum] |= MM_PAD_TRIANGLE;
+				}
+			}
+			if(menu_id == 4 && remote_game_state.in_game > 0 && target_screen == 4) target_screen = 5;
 			if(target_screen != menu_id && do_update && gn_remote_playernum == 0) {
 				for(i = 0; i < pads->num_pads; i++) {
 					pads->pads[i] |= (target_screen >= menu_id ? MM_PAD_X : MM_PAD_TRIANGLE);
@@ -419,12 +455,12 @@ void hMultiMenuHandleScreen(void *multi_menu) {
 				IP_MASK(masked_remote_ip, subnet_mask);
 				IP_SET(masked_gateway, gateway_ip);
 				IP_MASK(masked_gateway, subnet_mask);
-				printf("Subnet mask: %i.%i.%i.%i", subnet_mask.bytes[0], subnet_mask.bytes[1], subnet_mask.bytes[2], subnet_mask.bytes[3]);
-				printf("Masked remote IP: %i.%i.%i.%i\n", masked_remote_ip.bytes[0], masked_remote_ip.bytes[1], masked_remote_ip.bytes[2], masked_remote_ip.bytes[3]);
-				printf("Masked gateway: %i.%i.%i.%i\n", masked_gateway.bytes[0], masked_gateway.bytes[1], masked_gateway.bytes[2], masked_gateway.bytes[3]);
+				printf("Subnet mask: %d.%d.%d.%d\n", subnet_mask.bytes[0], subnet_mask.bytes[1], subnet_mask.bytes[2], subnet_mask.bytes[3]);
+				printf("Masked remote IP: %d.%d.%d.%d\n", masked_remote_ip.bytes[0], masked_remote_ip.bytes[1], masked_remote_ip.bytes[2], masked_remote_ip.bytes[3]);
+				printf("Masked gateway: %d.%d.%d.%d\n", masked_gateway.bytes[0], masked_gateway.bytes[1], masked_gateway.bytes[2], masked_gateway.bytes[3]);
 				if(!IP_EQ(masked_gateway, masked_remote_ip)) {
 					printf("Masked IPs don't match, using gateway\n");
-					IP_SET(gn_remote_ip_or_gateway, gn_remote_ip);
+					IP_SET(gn_remote_ip_or_gateway, gateway_ip);
 				}
 				gn_state = GN_CONNECTING_ARP;
 			}
@@ -458,7 +494,10 @@ void hMultiMenuHandleScreen(void *multi_menu) {
 		our_game_state.mm_screen = menu_id;
 		our_game_state.mm_song = *(int*)(multi_menu+0x9e0);
 		our_game_state.mm_character = MM_PLAYER_CHARACTER(multi_menu, gn_our_playernum);
-		if(menu_id == 3 && MM_PLAYER_READY(multi_menu, gn_our_playernum)) {
+		our_game_state.health = MM_PLAYER_STARTHEALTH(multi_menu, gn_our_playernum) * 0.01f;
+		if(MM_PLAYER_READY2(multi_menu, gn_our_playernum) && menu_id >= 4) {
+			our_game_state.mm_ready = 4;
+		} else if(!MM_PLAYER_READY(multi_menu, gn_our_playernum) && menu_id >= 3) {
 			our_game_state.mm_ready = 3;
 		} else {
 			our_game_state.mm_ready = 0;

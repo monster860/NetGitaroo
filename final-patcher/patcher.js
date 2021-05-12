@@ -21,6 +21,8 @@ const valid_elf_filenames = {
 			// Redirect the printf to the actual printf spot
 			[0x142588, 0x0804BA88],
 			[0x14258C, 0x00000000],
+			// Redirect the game over screen's controller get function
+			[0x1923c4, 0x0c08EDEC],
 			// Call the preloader
 			/*[0x100908, 0x08099183],
 			[0x100920, 0x7BBF0050],
@@ -61,6 +63,10 @@ const valid_elf_filenames = {
 				xgm: "PROJECTS/STDATA/US/VS_SEL/VS_SEL.XGM;1",
 				imx: "MARUCHI.IMX",
 				overlay: maruchi_patch
+			},
+			{
+				imx: "PROJECTS/STDATA/US/TITLE/TITLE.IMX;1",
+				overlay: title_patch
 			}
 		],
 		imc_files_to_patch: [
@@ -195,7 +201,7 @@ async function convert() {
 				imx_file = {offset: f.lba*2048, length: f.size};
 			}
 			let imx = read_imx(await infile.slice(imx_file.offset, imx_file.offset+imx_file.length).arrayBuffer());
-			document.body.appendChild(imx.canvas);
+			//document.body.appendChild(imx.canvas);
 			let overlay = new Image();
 			let promise = new Promise((resolve, reject) => {
 				overlay.onload = resolve;

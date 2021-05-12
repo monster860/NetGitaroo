@@ -6,13 +6,92 @@
 <script src="bins/smap_irx.js"></script>
 <script src="bins/bin_us.js"></script>
 <script src="bins/maruchi_patch.js"></script>
+<script src="bins/title_patch.js"></script>
 <script src="sound-processor.js"></script>
 <script src="image-processor.js"></script>
 <script src="patcher.js"></script>
 </head>
 
 <body>
-	<div>Choose your Gitaroo Man .iso file and press the button on the right to save the patched .iso file</div>
+	<pre>
+NetGitaroo
+By monster860
+Discord: monster860#0001
+
+=============
+What is this?
+=============
+
+This is a mod to allow you to play VS mode over the internet.
+It works on both emulator and actual console.
+
+====================
+Installation/Running
+====================
+
+You will need the following:
+- An uncompressed .iso file of the North American PS2 Gitaroo Man.
+- This webpage
+
+In addition, you will need *one* of the following
+- A PS2 emulator, running on a computer that is connected to the internet via Ethernet.
+- A PS2 that you can run backups on that is connected via Ethernet to a network that has DHCP.
+
+To patch your .iso file, simply click "Choose File" at the bottom of the page, select your
+.iso file, and click "Create Patched File".
+
+After that you can use the .iso file on a PS2 or a PS2 emulator.
+Methods to run on a PS2 include:
+- <a href='https://www.psx-place.com/threads/open-ps2-loader-0-9-3-user-guide-by-shaolinassassin.20541/'>OPL</a> over USB or HDD
+- ESR (using Free McBoot, or other exploit)
+- <a href='https://www.psx-place.com/threads/freedvdboot-by-cturt.30220/#post-255696'>FreeDvdBoot patcher (requires slim PS2)</a>
+
+==============
+Emulator notes
+==============
+
+I do not recommend playing this mod over emulator. However, if you do, I recommend the following:
+
+- Ensure you are using the latest development build of PCSX2, one with built-in networking support.
+- Under Audio Settings, make sure Synchronizing Mode is set to "Async Mix". This is to ensure the game doesn't go out of sync.
+- Make sure Fast CDVD is disabled under speedhacks
+- You will need <a href='https://nmap.org/npcap/'>NPCAP</a> installed to use PCSX2's networking functionality on Windows
+- Under "Network and HDD Settings" make sure that Ethernet is enabled, your ethernet device is Ethernet, switched.
+- You may need to use DHCP intercept, and configure a static IP using the options in the network and HDD settings menu.
+
+=============
+Using the mod
+=============
+
+Once you start up the game, if you enter the VS Mode menu, you will see three options, "Host", "Join", and "Couch".
+
+Host will allow you to see your PS2's IP address, as well as allow others to connect to you. If the IP address displayed
+is 0.0.0.0 that means that something is wrong. It could be that the DHCP failed, or another problem. In addition, you will
+likely need to port forward port 13437. If you don't know what that is, google is your friend. The game uses UDP.
+
+Join will allow you to join another's game. Use left and right on the D-pad to select digits of the IP adderess, use Up and Down
+to increment and decrement the digits, and once you are done, press X to begin connecting. You can press Triangle to cancel connecting.
+
+Couch will let you play the old way, with two controllers plugged in.
+
+When the connection is established, the person hosting gets Player 1, and the person joining gets Player 2. Player 1 may switch places
+by pressing square and circle at the same time.
+
+Currently, there is no way for Player 2 to end the connection, besides unplugging the network cable.
+
+==============
+Other features
+==============
+
+If you have netcat installed (Linux distributions often come with netcat) you can connect to UDP port 22577 to receive debug messages
+from the game. An example of how to run it is like so:
+
+    netcat -u &lt;ip of ps2&gt; 22577
+
+After running this, press Enter to send a blank UDP packet to the PS2 (so it knows that you exist), and it should start sending back
+any debug messages.
+
+	</pre>
 	<input type="file" id="fileinput">
 	<input type="button" onclick="convert()" value="Create Patched File">
 	<div id="savespot"></div>

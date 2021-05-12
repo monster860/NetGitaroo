@@ -61,6 +61,18 @@ GetFile = 0x23dc50;
 HandleInGameInputs = 0x118a30;
 ShowToast = 0x1aa8e0;
 UpdatePlayerStatus = 0x19da20;
+FinishLoading = 0x16b230;
+MultiPlayerGame = 0x192f70;
+ResetPadButtonCache = 0x23b420;
+GetPad = 0x23b7b0;
+GetPadButtonInstant = 0x23b4c0;
+HandleMultiPlayerInputs = 0x14b7a0;
+AddHealth = 0x1ac5b0;
+SubtractHealth = 0x1ac5e0;
+AdjustScore = 0x1ac2e0;
+CueSetup = 0x14ce50;
+TryAgainScreen = 0x192050;
+try_again_mainsprite_hook_point = 0x192328;
 _gp = 0x26C470;
 
 INCLUDE ld_main.ld
